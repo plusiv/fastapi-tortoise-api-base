@@ -1,0 +1,49 @@
+---
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: api-base-fastapi
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    networks:
+      - api
+
+  database:
+    image: mariadb
+    container_name: gob-do-database
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysql" ,"--password=root", "--user=root", "--execute=SHOW DATABASES"]
+      interval: 15s
+      timeout: 20s
+      retries: 5
+      start_period: 15s
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=gobdo
+      - MARIADB_USER=gobdo_user
+      - MARIADB_PASSWORD=p@ssw0rd
+    networks:
+      - api
+      - database
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - database
+
+networks:
+  api:
+    driver: bridge
+  database:
+    driver: bridge

@@ -1,0 +1,59 @@
+# This file contains database models that satisfies basic needs. The length
+# many of the standards used here has been taken from 
+# https://www.geekslop.com/technology-articles/2016/here-are-the-recommended-maximum-data-length-limits-for-common-database-and-programming-fields.
+# Some fields like e-mail has been taken from its RFC like the RFC 3696 for 
+# e-mail standards.
+
+from tortoise.models import Model
+from tortoise import fields
+from tortoise.contrib.pydantic import pydantic_model_creator
+
+
+############### Helper Models ###############
+class TimestampMixin:
+    created_at = fields.DatetimeField(null=True, auto_now_add=True)
+    modified_at = fields.DatetimeField(null=True)
+    disabled_at = fields.DatetimeField(null=True)
+
+
+class Describable:
+    description = fields.CharField(null=True, max_length=255)
+
+class SoftDelete:
+
+
+
+############### Database Models ###############
+class User(Model, TimestampMixin):
+    username = fields.CharField(max_length=64, unique=True)
+    email = fields.CharField(max_length=320, unique=True)
+    hashed_password = fields.CharField(max_length=255)
+    first_name = fields.CharField(max_length=70)
+    last_name =  fields.CharField(max_length=70)
+    sex = fields.BooleanField()
+    birthday = fields.DateField(null=True)
+    last_login = fields.DatetimeField(null=True)
+
+    # Relationships
+    role = fields.ForeignKeyField('models.Role', related_name='roles')
+
+    class PydanticMeta:
+        exclude = ("created_at", "modified_at", "hashed_password")
+    
+class Role(Model, TimestampMixin, Describable):
+    title = fields.CharField(max_length=50)
+    slug = fields.CharField(max_length=50, unique=True)
+
+    # Relationships
+    permission = fields.ManyToManyField('models.Permission', related_name='permissions')
+
+class Permission(Model, TimestampMixin, Describable):
+    title = fields.CharField(max_length=25)
+    slug = fields.CharField(max_length=25, unique=True)
+    
+
+############### Pydantic Models ###############
+User_Pydantic = pydantic_model_creator(User)
+Role_Pydantic = pydantic_model_creator(Role)
+
+

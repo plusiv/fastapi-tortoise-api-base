@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "api-base-fastapi"
+version = "0.1.0"
+description = ""
+authors = ["plusiv"]
+readme = "README.md"
+packages = [{include = "api_base_fastapi"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
+fastapi = "^0.95.1"
+tortoise-orm = {extras = ["asyncmy"], version = "^0.19.3"}
+python-dotenv = "^1.0.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.6"
+
+
+[tool.poetry.group.dev.dependencies]
+tortoise-cli = "^0.1.2"
+
+
+[tool.poetry.group.setup.dependencies]
+faker = "^18.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -19,9 +19,6 @@ class TimestampMixin:
 class Describable:
     description = fields.CharField(null=True, max_length=255)
 
-class SoftDelete:
-
-
 
 ############### Database Models ###############
 class User(Model, TimestampMixin):

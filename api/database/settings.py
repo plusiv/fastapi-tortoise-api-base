@@ -5,10 +5,10 @@ from api import env
 TORTOISE_ORM = {
     "connections": {
         "default": {
-            'engine': env.get('DATABASE_TYPE'),
+            'engine': f"tortoise.backends.{env.get('DATABASE_TYPE')}",
             'credentials': {
-                'host': env.get('DATABASE_HOST', default='127.0.0.1'),
-                'port': env.get('DATABASE_PORT', default='3306'),
+                'host': env.get('DATABASE_HOST', '127.0.0.1'),
+                'port': env.get('DATABASE_PORT', '3306'),
                 'user': env.get('DATABASE_USER'),
                 'password': env.get('DATABASE_PASSWORD'),
                 'database': env.get('DATABASE_NAME'),

@@ -1,6 +1,6 @@
-from . import config as env
+from . import env
 from .security import auth, hashing, jwt_handler as jwt
-from .models import User, Token 
+from .extra_models import Token 
 from fastapi import FastAPI, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Annotated

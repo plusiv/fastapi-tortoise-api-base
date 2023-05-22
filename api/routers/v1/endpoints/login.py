@@ -1,8 +1,8 @@
 from api.security import auth, hashing, jwt_handler as jwt
-from api.extra_models import Token 
+from api.models.token import Token
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
 
 
@@ -10,7 +10,6 @@ router = APIRouter()
 
 @router.post("/login", response_model=Token)
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    print(form_data.username, form_data.password)
     user = await auth.authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(

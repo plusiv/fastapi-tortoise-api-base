@@ -10,5 +10,12 @@ def create_access_token(data: dict, expires_delta: timedelta | None = timedelta(
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, env['SECRET_KEY'], algorithm=env['ALGORITHM'])
+    encoded_jwt = jwt.encode(to_encode, env.get('SECRET_KEY'), algorithm=env.get('ALGORITHM'))
     return encoded_jwt
+
+def decode_username(token) -> str | None:
+    try:
+        return jwt.decode(token, env.get('SECRET_KEY'), env.get('ALGORITHM')).get('sub')
+    except JWTError:
+        return
+        

@@ -33,7 +33,7 @@ class User(Model, TimestampMixin):
     role = fields.ForeignKeyField('models.Role', related_name='roles')
 
     class PydanticMeta:
-        exclude = ("created_at", "modified_at", "hashed_password")
+        exclude = ["hashed_password"]
     
 class Role(Model, TimestampMixin, Describable):
     title = fields.CharField(max_length=50)
@@ -41,6 +41,9 @@ class Role(Model, TimestampMixin, Describable):
 
     # Relationships
     permission = fields.ManyToManyField('models.Permission', related_name='permissions')
+
+    class PydanticMeta:
+        pass
 
 class Permission(Model, TimestampMixin, Describable):
     title = fields.CharField(max_length=25)

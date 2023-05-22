@@ -1,5 +1,5 @@
 from api.security import auth, hashing, jwt_handler as jwt
-from api.models.user import UserInfo
+from api.pydantic_models.user import UserInfoPydantic
 from api.routers.v1.dependencies import token_dep
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -10,7 +10,7 @@ from typing import Annotated
 
 router = APIRouter()
 
-@router.get("/me", response_model=UserInfo)
+@router.get("/me", response_model=UserInfoPydantic)
 async def get_user_info(token: token_dep):
     credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -24,7 +24,7 @@ async def get_user_info(token: token_dep):
     except Exception:
         raise credentials_exception
 
-    user = auth.get_user(username=username)
+    user = await auth.get_user(username=username)
     if not user:
         raise credentials_exception
     return user

@@ -1,4 +1,5 @@
-from api.database.models import User
+from api.database.models import User, Role
+from api.pydantic_models.user import UserPydantic, RolePydantic, UserInfoPydantic
 from api.security.hashing import verify_password
 from datetime import datetime
 
@@ -14,3 +15,17 @@ async def authenticate_user(username: str, password: str)->bool:
             await user.save()
             return True
     return False
+
+async def get_user(username: str) -> UserInfoPydantic | None:
+    user_futures = User.get_or_none(username=username)
+    user_values = await user_futures.values()
+
+    if user_values:
+        user_with_releated = await user_futures.prefetch_related('role')
+        role_pydantic = await RolePydantic.from_tortoise_orm(user_with_releated.role)
+
+        user_pydantic = await UserInfoPydantic.from_tortoise_orm( await user_futures )
+        user_pydantic.role_info = role_pydantic
+        return user_pydantic
+
+    return None

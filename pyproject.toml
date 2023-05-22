@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "api-base-fastapi"
+name = "fastapi-tortoise"
 version = "0.1.0"
 description = ""
 authors = ["plusiv"]
 readme = "README.md"
-packages = [{include = "api_base_fastapi"}]
+packages = [{include = "api"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

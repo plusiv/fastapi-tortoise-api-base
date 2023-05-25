@@ -49,3 +49,16 @@ class Permission(Model, TimestampMixin, Describable):
     title = fields.CharField(max_length=25)
     slug = fields.CharField(max_length=25, unique=True)
     
+class SentEmail(Model, Describable):
+    email_subject = fields.CharField(max_length=150, null=True)
+    from_email = fields.CharField(max_length=320)
+    to_email = fields.CharField(max_length=320)
+    template_name = fields.CharField(max_length=150, null=True)
+    template_id = fields.CharField(max_length=50, null=True)
+    sent_at = fields.DatetimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        table = "sent_email"
+
+    class PydanticMeta:
+        exclude = ["template_id"]

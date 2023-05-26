@@ -30,13 +30,14 @@ async def run():
     # Insert Users
     NUMBER_OF_USERS = 10
     for _ in range(NUMBER_OF_USERS):
+        simple_profile = f.simple_profile()
         user = {
-                "username": f.simple_profile().get('username'),
-                "first_name": f.first_name(),
-                "last_name": f.last_name(),
+                "username": simple_profile.get('username'),
+                "first_name": simple_profile.get("name").split(" ")[0],
+                "last_name": simple_profile.get("name").split(" ")[1],
                 "hashed_password": get_password_hash("sample"),
-                "email": f.ascii_email(), 
-                "sex": f.boolean(),
-                "birthday": f.date_of_birth(),
+                "email": simple_profile.get("mail"), 
+                "sex": simple_profile.get("sex"),
+                "birthdate": simple_profile.get("birthdate"),
                 }
         user = await User.create(**user, role = random.choice(roles_list))

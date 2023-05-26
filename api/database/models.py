@@ -36,6 +36,9 @@ class User(Model, TimestampMixin):
     # Relationships
     role = fields.ForeignKeyField('models.Role', related_name='roles')
 
+    class Meta:
+        table = "user"
+
     class PydanticMeta:
         exclude = ["hashed_password"]
     
@@ -46,12 +49,18 @@ class Role(Model, TimestampMixin, Describable):
     # Relationships
     permission = fields.ManyToManyField('models.Permission', related_name='permissions')
 
+    class Meta:
+        table = "role"
+
     class PydanticMeta:
         pass
 
 class Permission(Model, TimestampMixin, Describable):
     title = fields.CharField(max_length=25)
     slug = fields.CharField(max_length=25, unique=True)
+
+    class Meta:
+        table = "permission"
     
 class SentEmail(Model, Describable):
     email_subject = fields.CharField(max_length=150, null=True)

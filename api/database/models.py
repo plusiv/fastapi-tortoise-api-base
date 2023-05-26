@@ -5,7 +5,11 @@
 # e-mail standards.
 from tortoise.models import Model
 from tortoise import fields
+from enum import Enum
 
+class Sex(str, Enum):
+    male = "M"
+    female = "F"
 
 ############### Helper Models ###############
 class TimestampMixin:
@@ -25,8 +29,8 @@ class User(Model, TimestampMixin):
     hashed_password = fields.CharField(max_length=255)
     first_name = fields.CharField(max_length=70)
     last_name =  fields.CharField(max_length=70)
-    sex = fields.BooleanField()
-    birthday = fields.DateField(null=True)
+    sex = fields.CharEnumField(Sex, null=True)
+    birthdate = fields.DateField(null=True)
     last_login = fields.DatetimeField(null=True)
 
     # Relationships

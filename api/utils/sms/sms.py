@@ -1,5 +1,5 @@
 import os
-import requests
+import aiohttp
 
 
 async def send_sms(number_to: str, 
@@ -13,8 +13,19 @@ async def send_sms(number_to: str,
     }
 
     try:
-        response = requests.post(
-            env.get('TWILIO_API_URL'),
-            data=data,
-            auth=(env.get('TWILIO_ACCOUNT_SID'), env.get('TWILIO_AUTH_TOKEN'))
-        )
+        async with aiohttp.ClientSession() as session:
+            async with session.post(env.get("TWILIO_API_URL"), json=data):
+                ...
+    
+
+    except aiohttp.ServerTimeoutError:
+        print("Request Timeout")
+    except aiohttp.TooManyRedirects:
+        print("Too many redirects")
+    except aiohttp.ClientResponseError as e:
+        print(f"A client response error has occourred {e}")
+    except aiohttp.ClientError as e:
+        print(f"A client error has occourred: {e}")
+    except aiohttp.ClientConnectionError as e:
+        print(f"A client connection error has occourred {e}")
+

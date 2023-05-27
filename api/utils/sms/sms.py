@@ -1,14 +1,16 @@
-import os
 import aiohttp
+from api import env
+from api.pydantic_models.message import SentSMSPydantic
+from api.database.models import SentSMS
 
 
 async def send_sms(number_to: str, 
-                   number_from: str = env.get(TWILIO_FROM_NUMBER),
-                   body: str) -> SentSMS:
+                   body: str = "",
+                   number_from: str = env.get("TWILIO_FROM_NUMBER")) -> SentSMSPydantic:
 
     data = {
         'Body': body,
-        'From': env.get(TWILIO_FROM_NUMBER),
+        'From': env.get("TWILIO_FROM_NUMBER"),
         'To': number_to,
     }
 
@@ -16,6 +18,14 @@ async def send_sms(number_to: str,
         async with aiohttp.ClientSession() as session:
             async with session.post(env.get("TWILIO_API_URL"), json=data):
                 ...
+
+        sent_sms = await SentSMSP.create(
+                from_sms=data.get("FROM"),
+                to_sms=data.get("TO"),
+                body=data.get("Body"))
+        
+        sent_sms_pydantic = await SentSMSPydantic.from_tortoise_orm(sent_sms)
+        return sent_sms_pydantic
     
 
     except aiohttp.ServerTimeoutError:
@@ -29,3 +39,11 @@ async def send_sms(number_to: str,
     except aiohttp.ClientConnectionError as e:
         print(f"A client connection error has occourred {e}")
 
+    sent_sms = await SentSMSP.create(
+            from_sms=data.get("FROM"),
+            to_sms=data.get("TO"),
+            body=data.get("Body"),
+            sent_at=None)
+    
+    sent_sms_pydantic = await SentSMSPydantic.from_tortoise_orm(sent_sms)
+    return sent_sms_pydantic

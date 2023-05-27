@@ -1,4 +1,4 @@
-from api.pydantic_models.email import SentEmailPydantic
+from api.pydantic_models.message import SentEmailPydantic
 from api.routers.v1.dependencies import current_user
 from api.utils.email import email
 
@@ -11,7 +11,7 @@ from typing import Annotated
 router = APIRouter()
 
 @router.post("/test", response_model=SentEmailPydantic)
-async def send_wellcome_email(current_user: current_user, email_destination: str):
+async def send_test_email(current_user: current_user, email_destination: str):
     sent_email = await email.send_wellcome(current_user.first_name, email_to=email_destination)
 
     if not sent_email.sent_at:

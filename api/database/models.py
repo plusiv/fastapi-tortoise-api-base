@@ -21,6 +21,10 @@ class TimestampMixin:
 class Describable:
     description = fields.CharField(null=True, max_length=255)
 
+class Message:
+    sent_at = fields.DatetimeField(auto_now_add=True, null=True)
+    
+
 
 ############### Database Models ###############
 class User(Model, TimestampMixin):
@@ -62,16 +66,25 @@ class Permission(Model, TimestampMixin, Describable):
     class Meta:
         table = "permission"
     
-class SentEmail(Model, Describable):
+class SentEmail(Model, Describable, Message):
     email_subject = fields.CharField(max_length=150, null=True)
     from_email = fields.CharField(max_length=320)
     to_email = fields.CharField(max_length=320)
     template_name = fields.CharField(max_length=150, null=True)
     template_id = fields.CharField(max_length=50, null=True)
-    sent_at = fields.DatetimeField(auto_now_add=True, null=True)
 
     class Meta:
         table = "sent_email"
 
     class PydanticMeta:
         exclude = ["template_id"]
+
+class SentSMS(Model, Describable, Message):
+    # Max length based on Twilio number format.
+    # see https://www.twilio.com/docs/voice/twiml/number#attributes
+    from_sms = fields.CharField(max_length=11)
+    to_sms = fields.CharField(max_length=11)
+
+    # Max length based on Twilio recommendations.
+    # see https://support.twilio.com/hc/en-us/articles/360033806753-Maximum-Message-Length-with-Twilio-Programmable-Messaging
+    body = fields.CharField(max_length=320)

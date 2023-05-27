@@ -1,5 +1,5 @@
 import copy
-import requests
+import aiohttp
 
 from api import env
 from api.database.models import SentEmail
@@ -57,22 +57,25 @@ async def send_wellcome(first_name: str,
             }
 
     try:
-        response = requests.post(env.get("SENDGRID_API_URL"), headers=headers, json=json_data_copy)
-        response.raise_for_status()
+        async with aiohttp.ClientSession() as session:
+            async with session.post(env.get("SENDGRID_API_URL"), headers=headers, json=json_data_copy):
+                ...
+
         sent_email = await SentEmail.create(**sent_email)
         sent_email_pydantic = await SentEmailPydantic.from_tortoise_orm(sent_email)
     
         return sent_email_pydantic
 
-    except requests.exceptions.Timeout:
-        # Maybe set up for a retry, or continue in a retry loop
+    except aiohttp.ServerTimeoutError:
         print("Request Timeout")
-    except requests.exceptions.TooManyRedirects:
-        # Tell the user their URL was bad and try a different one
+    except aiohttp.TooManyRedirects:
         print("Too many redirects")
-    except requests.exceptions.RequestException as e:
-        # catastrophic error. bail.
-        print(f"An exception has accourred: {e}")
+    except aiohttp.ClientResponseError as e:
+        print(f"A client response error has occourred {e}")
+    except aiohttp.ClientError as e:
+        print(f"A client error has occourred: {e}")
+    except aiohttp.ClientConnectionError as e:
+        print(f"A client connection error has occourred {e}")
 
 
     sent_email.update({"sent_at": None})

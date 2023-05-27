@@ -3,7 +3,7 @@ import aiohttp
 
 from api import env
 from api.database.models import SentEmail
-from api.pydantic_models.email import SentEmailPydantic
+from api.pydantic_models.message import SentEmailPydantic
 
 
 headers = {

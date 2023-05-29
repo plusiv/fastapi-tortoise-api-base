@@ -22,10 +22,15 @@ email-validator = "^2.0.0.post2"
 
 [tool.poetry.group.dev.dependencies]
 tortoise-cli = "^0.1.2"
-
-
-[tool.poetry.group.setup.dependencies]
 faker = "^18.9.0"
+aerich = "^0.7.1"
+
+
+
+[tool.aerich]
+tortoise_orm = "app.core.settings.TORTOISE_ORM"
+location = "app/database/migrations"
+src_folder = "./."
 
 [build-system]
 requires = ["poetry-core"]

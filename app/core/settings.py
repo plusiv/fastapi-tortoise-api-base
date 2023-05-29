@@ -43,7 +43,7 @@ class Settings(BaseSettings):
                 },
             },
             "apps": {
-                "models": {"models": ["app.database.models"], "default_connection": "default"},
+                "models": {"models": ["app.database.models", "aerich.models"], "default_connection": "default"},
             }
         }
 
@@ -54,6 +54,7 @@ class Settings(BaseSettings):
 
 try:
     env = Settings()
+    TORTOISE_ORM = env.TORTOISE_ORM
 except ValidationError as e:
     print(f"A validation error has occoured in config file {ENV_PATH}: {e}")
     

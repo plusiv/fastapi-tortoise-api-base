@@ -8,9 +8,6 @@ async def init():
     await Tortoise.init(
         config = env.TORTOISE_ORM
     )
-
-    print("Generating Schemas ...")
-    await Tortoise.generate_schemas(safe=True if env.ENV == 'production' else False)
     
     print("Start Seeding ...")
     await sample_seeders.run()

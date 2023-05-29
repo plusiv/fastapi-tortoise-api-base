@@ -1,22 +1,22 @@
 import aiohttp
-from api import env
+from api.settings import env
 from api.pydantic_models.message import SentSMSPydantic
 from api.database.models import SentSMS
 
 
 async def send_sms(number_to: str, 
                    body: str = "",
-                   number_from: str = env.get("TWILIO_FROM_NUMBER")) -> SentSMSPydantic:
+                   number_from: str = env.TWILIO_FROM_NUMBER) -> SentSMSPydantic:
 
     data = {
         'Body': body,
-        'From': env.get("TWILIO_FROM_NUMBER"),
+        'From': env.TWILIO_FROM_NUMBER,
         'To': number_to,
     }
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.post(env.get("TWILIO_API_URL"), json=data):
+            async with session.post(env.TWILIO_API_URL, json=data):
                 ...
 
         sent_sms = await SentSMSP.create(

@@ -1,19 +1,19 @@
 import copy
 import aiohttp
 
-from api import env
+from api.settings import env
 from api.database.models import SentEmail
 from api.pydantic_models.message import SentEmailPydantic
 
 
 headers = {
-    'Authorization': f'Bearer {env.get("SENDGRID_API_KEY")}',
+    'Authorization': f'Bearer {env.SENDGRID_API_KEY}',
     'Content-Type': 'application/json',
 }
 
 json_data = {
     'from': {
-        'email': env.get("SENDGRID_SENDER"),
+        'email': env.SENDGRID_SENDER,
     },
     'personalizations': [
         {
@@ -29,7 +29,7 @@ json_data = {
 }
 
 async def send_wellcome(first_name: str,
-                  template_id: str = env.get("SENDGRID_NEW_USER_TEMPLATE_ID"),
+                  template_id: str = env.SENDGRID_NEW_USER_TEMPLATE_ID,
                   email_to: str = "blackhole@example.com") -> SentEmailPydantic:
     
     subject = f"Welcome {first_name}! Thanks for signing up." 
@@ -51,14 +51,14 @@ async def send_wellcome(first_name: str,
     # Create email data for database
     sent_email = {
             "email_subject": subject,
-            "from_email": env.get("SENDGRID_SENDER"),
+            "from_email": env.SENDGRID_SENDER,
             "to_email": email_to,
             "template_name": "Wellcome 1.0",
             }
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.post(env.get("SENDGRID_API_URL"), headers=headers, json=json_data_copy):
+            async with session.post(env.SENDGRID_API_URL, headers=headers, json=json_data_copy):
                 ...
 
         sent_email = await SentEmail.create(**sent_email)

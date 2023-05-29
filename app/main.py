@@ -1,5 +1,5 @@
-from api.core.settings import env
-from api.routers.v1 import api as v1, ROUTE_PREFIX as v1_prefix
+from app.core.settings import env
+from app.routers.v1 import api as v1, ROUTE_PREFIX as v1_prefix
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
 

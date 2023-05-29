@@ -1,5 +1,5 @@
-from api.core.security import auth, hashing, jwt_handler as jwt
-from api.pydantic_models.token import TokenPydantic
+from app.core.security import auth, hashing, jwt_handler as jwt
+from app.pydantic_models.token import TokenPydantic
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm

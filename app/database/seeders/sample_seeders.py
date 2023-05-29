@@ -1,5 +1,5 @@
-from api.database.models import User, Role, Permission
-from api.core.security.hashing import get_password_hash
+from app.database.models import User, Role, Permission
+from app.core.security.hashing import get_password_hash
 import random
 from faker import Faker
 

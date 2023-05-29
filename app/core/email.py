@@ -1,9 +1,9 @@
 import copy
 import aiohttp
 
-from api.core.settings import env
-from api.database.models import SentEmail
-from api.pydantic_models.message import SentEmailPydantic
+from app.core.settings import env
+from app.database.models import SentEmail
+from app.pydantic_models.message import SentEmailPydantic
 
 
 headers = {

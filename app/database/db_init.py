@@ -1,7 +1,7 @@
 from tortoise import Tortoise, run_async
-from api.core.settings import env
+from app.core.settings import env
 from .seeders import sample_seeders
-from api.database.models import User, Role, Permission
+from app.database.models import User, Role, Permission
 
 
 async def init():

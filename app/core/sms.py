@@ -1,7 +1,7 @@
 import aiohttp
-from api.core.settings import env
-from api.pydantic_models.message import SentSMSPydantic
-from api.database.models import SentSMS
+from app.core.settings import env
+from app.pydantic_models.message import SentSMSPydantic
+from app.database.models import SentSMS
 
 
 async def send_sms(number_to: str, 

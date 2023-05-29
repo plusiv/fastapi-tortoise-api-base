@@ -1,4 +1,4 @@
-from api.database.models import SentEmail, SentSMS
+from app.database.models import SentEmail, SentSMS
 from pydantic import BaseModel
 from typing import List
 from tortoise.contrib.pydantic import pydantic_model_creator

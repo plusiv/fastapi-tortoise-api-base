@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["plusiv"]
 readme = "README.md"
-packages = [{include = "api"}]
+packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

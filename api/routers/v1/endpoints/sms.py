@@ -1,6 +1,6 @@
 from api.pydantic_models.message import SentSMSPydantic
 from api.routers.v1.dependencies import current_user
-from api.utils.sms import sms
+from api.core import sms
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer

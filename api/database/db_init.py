@@ -1,5 +1,5 @@
 from tortoise import Tortoise, run_async
-from api.settings import env
+from api.core.settings import env
 from .seeders import sample_seeders
 from api.database.models import User, Role, Permission
 

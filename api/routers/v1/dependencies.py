@@ -1,4 +1,4 @@
-from api.security import auth, hashing, jwt_handler as jwt
+from api.core.security import auth, hashing, jwt_handler as jwt
 from api.routers.v1 import ROUTE_PREFIX
 from api.pydantic_models.user import UserInfoPydantic
 from typing import Annotated

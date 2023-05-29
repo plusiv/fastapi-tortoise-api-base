@@ -1,6 +1,6 @@
 from api.database.models import User, Role
 from api.pydantic_models.user import UserPydantic, RolePydantic, UserInfoPydantic
-from api.security.hashing import verify_password
+from api.core.security.hashing import verify_password
 from datetime import datetime
 
 async def authenticate_user(username: str, password: str)->bool:

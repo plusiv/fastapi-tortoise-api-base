@@ -1,6 +1,6 @@
 from api.pydantic_models.message import SentEmailPydantic
 from api.routers.v1.dependencies import current_user
-from api.utils.email import email
+from api.core import email
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer

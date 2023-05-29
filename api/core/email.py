@@ -1,7 +1,7 @@
 import copy
 import aiohttp
 
-from api.settings import env
+from api.core.settings import env
 from api.database.models import SentEmail
 from api.pydantic_models.message import SentEmailPydantic
 

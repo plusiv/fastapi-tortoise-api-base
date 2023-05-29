@@ -1,5 +1,5 @@
 import aiohttp
-from api.settings import env
+from api.core.settings import env
 from api.pydantic_models.message import SentSMSPydantic
 from api.database.models import SentSMS
 

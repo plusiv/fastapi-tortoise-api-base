@@ -43,7 +43,7 @@ class Settings(BaseSettings):
                 },
             },
             "apps": {
-                "models": {"models": ["api.database.models"], "default_connection": "default"},
+                "models": {"models": ["app.database.models"], "default_connection": "default"},
             }
         }
 

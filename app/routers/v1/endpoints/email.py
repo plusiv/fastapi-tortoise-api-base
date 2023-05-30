@@ -3,9 +3,7 @@ from app.routers.v1.dependencies import current_user
 from app.core import email
 
 from fastapi import APIRouter, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
 
-from typing import Annotated
 
 
 router = APIRouter()

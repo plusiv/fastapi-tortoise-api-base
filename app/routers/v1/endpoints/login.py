@@ -1,4 +1,4 @@
-from app.core.security import auth, hashing, jwt_handler as jwt
+from app.core.security import auth, jwt_handler as jwt
 from app.pydantic_models.token import TokenPydantic
 
 from fastapi import APIRouter, Depends, HTTPException, status

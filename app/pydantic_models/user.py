@@ -1,6 +1,4 @@
 from app.database.models import User as User_DB_Model, Role as Role_DB_Model
-from pydantic import BaseModel
-from typing import List
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 

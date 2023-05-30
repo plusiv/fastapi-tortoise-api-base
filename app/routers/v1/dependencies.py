@@ -9,12 +9,13 @@ from fastapi.security import OAuth2PasswordBearer
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{ROUTE_PREFIX}/login")
 token_dep = Annotated[str, Depends(oauth2_scheme)]
 
+
 async def get_current_user(token: token_dep):
     credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials.",
-            headers={"WWW-AUTHENTICATE": "Bearer"}
-            )
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials.",
+        headers={"WWW-AUTHENTICATE": "Bearer"},
+    )
     try:
         username = jwt.decode_username(token)
         if not username:
@@ -27,9 +28,13 @@ async def get_current_user(token: token_dep):
         raise credentials_exception
     return user
 
-async def get_current_active_user(current_user: Annotated[UserInfoPydantic, Depends(get_current_user)]):
+
+async def get_current_active_user(
+    current_user: Annotated[UserInfoPydantic, Depends(get_current_user)]
+):
     if current_user.disabled_at:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
-current_user = Annotated[UserInfoPydantic, Depends(get_current_active_user)] 
+
+current_user = Annotated[UserInfoPydantic, Depends(get_current_active_user)]

@@ -40,7 +40,7 @@ try:
     env = Settings()
 except ValidationError as e:
     print(f"A validation error has occoured in config file {ENV_PATH}: {e}")
-  
+
 TORTOISE_ORM = {
     "connections": {
         "default": {
@@ -50,14 +50,18 @@ TORTOISE_ORM = {
                 "port": env.DATABASE_PORT,
                 "user": env.DATABASE_USER,
                 "password": env.DATABASE_PASSWORD,
-                "database": env.DATABASE_NAME
-            }
+                "database": env.DATABASE_NAME,
+            },
         },
     },
     "apps": {
-        "models": {"models": ["app.database.models", "aerich.models"], "default_connection": "default"},
-    }
-} 
+        "models": {
+            "models": ["app.database.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+}
+
 
 def init_loggers() -> None:
     # create logger

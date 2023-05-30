@@ -24,6 +24,7 @@ email-validator = "^2.0.0.post2"
 tortoise-cli = "^0.1.2"
 faker = "^18.9.0"
 aerich = "^0.7.1"
+black = "^23.3.0"
 
 
 

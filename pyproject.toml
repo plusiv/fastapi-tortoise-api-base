@@ -28,6 +28,8 @@ black = "^23.3.0"
 flake8 = "^6.0.0"
 autoflake = "^2.1.1"
 pre-commit = "^3.3.2"
+httpx = "^0.24.1"
+pytest = "^7.3.1"
 
 
 

@@ -5,7 +5,6 @@ from app.core import email
 from fastapi import APIRouter, HTTPException, status
 
 
-
 router = APIRouter()
 
 

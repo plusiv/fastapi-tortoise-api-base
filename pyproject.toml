@@ -25,6 +25,7 @@ tortoise-cli = "^0.1.2"
 faker = "^18.9.0"
 aerich = "^0.7.1"
 black = "^23.3.0"
+flake8 = "^6.0.0"
 
 
 

@@ -8,14 +8,15 @@ init_loggers()
 app = FastAPI()
 app.include_router(v1.router, prefix=v1_prefix)
 
+
 # Health Check
 @app.get("/ping", tags=["Health Check"])
 async def ping():
     return "pong"
+
 
 register_tortoise(
     app=app,
     config=TORTOISE_ORM,
     add_exception_handlers=True,
 )
-

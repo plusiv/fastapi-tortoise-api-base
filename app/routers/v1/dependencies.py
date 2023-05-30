@@ -1,4 +1,5 @@
-from app.core.security import auth, hashing, jwt_handler as jwt
+# -*- coding: utf-8 -*-
+from app.core.security import auth, jwt_handler as jwt
 from app.routers.v1 import ROUTE_PREFIX
 from app.pydantic_models.user import UserInfoPydantic
 from typing import Annotated

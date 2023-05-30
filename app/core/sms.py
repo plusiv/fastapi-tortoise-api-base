@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 import aiohttp
 from app.core.settings import env, log
 from app.pydantic_models.message import SentSMSPydantic
-from app.database.models import SentSMS
 
 
 async def send_sms(
@@ -18,7 +18,7 @@ async def send_sms(
             async with session.post(env.TWILIO_API_URL, json=data):
                 ...
 
-        sent_sms = await SentSMSP.create(
+        sent_sms = await SentSMSPydantic.create(
             from_sms=data.get("FROM"), to_sms=data.get("TO"), body=data.get("Body")
         )
 
@@ -36,7 +36,7 @@ async def send_sms(
     except aiohttp.ClientConnectionError as e:
         log.error(f"A client connection error has occourred {e}")
 
-    sent_sms = await SentSMSP.create(
+    sent_sms = await SentSMSPydantic.create(
         from_sms=data.get("FROM"),
         to_sms=data.get("TO"),
         body=data.get("Body"),

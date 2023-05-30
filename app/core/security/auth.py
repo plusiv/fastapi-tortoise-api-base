@@ -1,5 +1,6 @@
-from app.database.models import User, Role
-from app.pydantic_models.user import UserPydantic, RolePydantic, UserInfoPydantic
+# -*- coding: utf-8 -*-
+from app.database.models import User
+from app.pydantic_models.user import RolePydantic, UserInfoPydantic
 from app.core.security.hashing import verify_password
 from datetime import datetime
 

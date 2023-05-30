@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This file contains database models that satisfies basic needs. The length
 # many of the standards used here has been taken from
 # https://www.geekslop.com/technology-articles/2016/here-are-the-recommended-maximum-data-length-limits-for-common-database-and-programming-fields.
@@ -13,7 +14,7 @@ class Sex(str, Enum):
     female = "F"
 
 
-############### Helper Models ###############
+# Helper Models
 class TimestampMixin:
     created_at = fields.DatetimeField(null=True, auto_now_add=True)
     modified_at = fields.DatetimeField(null=True)
@@ -28,7 +29,7 @@ class Message:
     sent_at = fields.DatetimeField(auto_now_add=True, null=True)
 
 
-############### Database Models ###############
+# Database Models
 class User(Model, TimestampMixin):
     username = fields.CharField(max_length=64, unique=True)
     email = fields.CharField(max_length=320, unique=True)

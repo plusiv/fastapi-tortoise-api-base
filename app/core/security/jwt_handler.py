@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from app.core.settings import env, log

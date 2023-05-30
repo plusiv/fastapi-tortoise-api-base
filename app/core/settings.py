@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 import uvicorn
 import logging
-from pydantic import BaseSettings, EmailStr, HttpUrl, ValidationError, Field, validator
+from pydantic import BaseSettings, EmailStr, HttpUrl, ValidationError
 
 ENV_PATH = ".env"
 

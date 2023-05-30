@@ -81,4 +81,3 @@ WORKDIR ${WORK_DIR}
 USER ${USER_NAME}
 
 CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app"]
-

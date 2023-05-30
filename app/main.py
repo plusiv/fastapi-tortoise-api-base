@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 from app.core.settings import TORTOISE_ORM, init_loggers
 from app.routers.v1 import api as v1, ROUTE_PREFIX as v1_prefix
 from fastapi import FastAPI
-from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
+from tortoise.contrib.fastapi import register_tortoise
 
 init_loggers()
 

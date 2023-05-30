@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from fastapi import APIRouter
 from app.routers.v1.endpoints import login, users, email, sms
 

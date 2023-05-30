@@ -1,7 +1,7 @@
 import copy
 import aiohttp
 
-from app.core.settings import env
+from app.core.settings import env, log
 from app.database.models import SentEmail
 from app.pydantic_models.message import SentEmailPydantic
 
@@ -67,15 +67,15 @@ async def send_wellcome(first_name: str,
         return sent_email_pydantic
 
     except aiohttp.ServerTimeoutError:
-        print("Request Timeout")
+        log.error("Request Timeout")
     except aiohttp.TooManyRedirects:
-        print("Too many redirects")
+        log.error("Too many redirects")
     except aiohttp.ClientResponseError as e:
-        print(f"A client response error has occourred {e}")
+        log.error(f"A client response error has occourred {e}")
     except aiohttp.ClientError as e:
-        print(f"A client error has occourred: {e}")
+        log.error(f"A client error has occourred: {e}")
     except aiohttp.ClientConnectionError as e:
-        print(f"A client connection error has occourred {e}")
+        log.error(f"A client connection error has occourred {e}")
 
 
     sent_email.update({"sent_at": None})

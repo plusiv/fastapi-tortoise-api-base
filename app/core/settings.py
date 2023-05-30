@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     DATABASE_HOST: str
     DATABASE_NAME: str
     DATABASE_PORT: int | str
-    TORTOISE_ORM: dict = None
 
     ACCESS_TOKEN_SECRET_KEY: str
     ACCESS_TOKEN_ALGORITHM: str = "HS256"
@@ -30,27 +29,7 @@ class Settings(BaseSettings):
     TWILIO_API_URL: HttpUrl = None
     TWILIO_API_KEY: str = None
 
-    LOGS_FORMAT: str = "%(levelprefix)s %(asctime)s | %(message)s"
-
-    @validator("TORTOISE_ORM", always=True)
-    def create_tortoise_config(cls, v, values, **kwargs):
-        return {
-            "connections": {
-                "default": {
-                    "engine": f"tortoise.backends.{values['DATABASE_TYPE']}",
-                    "credentials": {
-                        "host": values["DATABASE_HOST"],
-                        "port": values["DATABASE_PORT"],
-                        "user": values["DATABASE_USER"],
-                        "password": values["DATABASE_PASSWORD"],
-                        "database": values["DATABASE_NAME"]
-                    }
-                },
-            },
-            "apps": {
-                "models": {"models": ["app.database.models", "aerich.models"], "default_connection": "default"},
-            }
-        }
+    LOG_FORMAT: str = "%(levelprefix)s %(asctime)s | %(message)s"
 
     class Config:
         env_file = ENV_PATH
@@ -59,10 +38,27 @@ class Settings(BaseSettings):
 
 try:
     env = Settings()
-    TORTOISE_ORM = env.TORTOISE_ORM
 except ValidationError as e:
     print(f"A validation error has occoured in config file {ENV_PATH}: {e}")
-    
+  
+TORTOISE_ORM = {
+    "connections": {
+        "default": {
+            "engine": f"tortoise.backends.{env.DATABASE_TYPE}",
+            "credentials": {
+                "host": env.DATABASE_HOST,
+                "port": env.DATABASE_PORT,
+                "user": env.DATABASE_USER,
+                "password": env.DATABASE_PASSWORD,
+                "database": env.DATABASE_NAME
+            }
+        },
+    },
+    "apps": {
+        "models": {"models": ["app.database.models", "aerich.models"], "default_connection": "default"},
+    }
+} 
+
 def init_loggers() -> None:
     # create logger
     logger = logging.getLogger(env.APP_NAME)
@@ -72,7 +68,7 @@ def init_loggers() -> None:
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
 
-    formatter = uvicorn.logging.DefaultFormatter(env.LOGS_FORMAT)
+    formatter = uvicorn.logging.DefaultFormatter(env.LOG_FORMAT)
 
     # add formatter to ch
     ch.setFormatter(formatter)

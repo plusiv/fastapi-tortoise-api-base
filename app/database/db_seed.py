@@ -1,12 +1,12 @@
 from tortoise import Tortoise, run_async
-from app.core.settings import env
+from app.core.settings import TORTOISE_ORM
 from .seeders import sample_seeders
 from app.database.models import User, Role, Permission
 
 
 async def init():
     await Tortoise.init(
-        config = env.TORTOISE_ORM
+        config = TORTOISE_ORM
     )
     
     print("Start Seeding ...")

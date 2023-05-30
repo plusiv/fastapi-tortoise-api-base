@@ -260,4 +260,7 @@ tags
 .history
 .ionide
 
+# COMMENT THIS LINE IN A REAL PROJECT
+app/database/migrations/
+
 # End of https://www.toptal.com/developers/gitignore/api/python,vim,visualstudiocode,macos,dotenv,venv

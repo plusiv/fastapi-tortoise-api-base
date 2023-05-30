@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from app.pydantic_models.message import SentSMSPydantic
 from app.routers.v1.dependencies import current_user
 from app.core import sms

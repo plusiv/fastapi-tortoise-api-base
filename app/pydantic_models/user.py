@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from app.database.models import User as User_DB_Model, Role as Role_DB_Model
 from tortoise.contrib.pydantic import pydantic_model_creator
 

@@ -38,5 +38,3 @@ Make sure you have the following installed before setting up the project:
     poetry shell
     uvicorn --reload app.main:app
     ```
-    
-

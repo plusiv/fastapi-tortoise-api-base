@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tortoise import Tortoise, run_async
 from app.core.settings import TORTOISE_ORM
 from .seeders import sample_seeders

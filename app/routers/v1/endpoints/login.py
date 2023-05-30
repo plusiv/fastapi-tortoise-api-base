@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from app.core.security import auth, jwt_handler as jwt
 from app.pydantic_models.token import TokenPydantic
 

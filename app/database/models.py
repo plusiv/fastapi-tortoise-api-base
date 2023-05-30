@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This file contains database models that satisfies basic needs. The length
 # many of the standards used here has been taken from
 # https://www.geekslop.com/technology-articles/2016/here-are-the-recommended-maximum-data-length-limits-for-common-database-and-programming-fields.

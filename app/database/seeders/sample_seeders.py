@@ -5,7 +5,7 @@ import random
 from faker import Faker
 
 
-async def run():
+async def generate_seeders(number_of_users: int = 10, test_user: dict = None):
     f = Faker(["es_ES"])
 
     # Insert Roles
@@ -31,14 +31,19 @@ async def run():
         await role.permission.add(*permissions_list)
 
     # Insert Users
-    NUMBER_OF_USERS = 10
-    for _ in range(NUMBER_OF_USERS):
+    sample_password = "sample"
+    test_user = {"username": "test", "password": "test"} if not test_user else test_user
+    for n in range(number_of_users):
         simple_profile = f.simple_profile()
         user = {
-            "username": simple_profile.get("username"),
+            "username": simple_profile.get("username")
+            if n != 0
+            else test_user["username"],
             "first_name": simple_profile.get("name").split(" ")[0],
             "last_name": simple_profile.get("name").split(" ")[1],
-            "hashed_password": get_password_hash("sample"),
+            "hashed_password": get_password_hash(
+                sample_password if n != 0 else test_user["password"]
+            ),
             "email": simple_profile.get("mail"),
             "sex": simple_profile.get("sex"),
             "birthdate": simple_profile.get("birthdate"),

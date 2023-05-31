@@ -6,6 +6,7 @@ from datetime import datetime
 
 
 async def authenticate_user(username: str, password: str) -> bool:
+    print(username, password)
     user = await User.get_or_none(username=username)
 
     # Avoid password verification if user is None

@@ -23,7 +23,7 @@ Make sure you have the following installed before setting up the project:
     # This will install all project dependencies.
     poetry install
     ```
-    
+
     _Optionally install [pre-commit](https://pre-commit.com/) hooks._
     ```bash
     # Install pre-commit (optional)

@@ -24,18 +24,14 @@ async def get_user_todos(
     if todo_id:
         todos = await todos.filter(id=todo_id).first().prefetch_related("statuses")
         last_status = await todos.statuses.order_by("-created_at").first()
-        # TODO: Use new serialization function
-        todo_pydantic = await TodoPydantic.from_tortoise_orm(todos)
-        todo_pydantic.status = await TodoStatusPydantic.from_tortoise_orm(last_status)
+        todo_pydantic = await utils.serialize_todo(todos, last_status)
         return todo_pydantic
 
     await user.fetch_related("todos__statuses")
     todos_pydantic_list = []
     async for todo in user.todos:
-        # TODO: Use new serialization function
-        todo_pydantic = await TodoPydantic.from_tortoise_orm(todo)
         last_status = await todo.statuses.order_by("-created_at").first()
-        todo_pydantic.status = await TodoStatusPydantic.from_tortoise_orm(last_status)
+        todo_pydantic = await utils.serialize_todo(todo, last_status)
         todos_pydantic_list.append(todo_pydantic)
 
     return TodoPydanticList(__root__=todos_pydantic_list)
@@ -44,12 +40,10 @@ async def get_user_todos(
 async def create_user_todo(user_id: int, todo: TodoPydanticIn) -> TodoPydantic:
     try:
         default_todo_status = await TodoStatus.get(slug=env.APP_TODO_DEFAULT_STATUS)
-        user = await User.get(id=user_id)
         todo_ = await Todo.create(**todo.dict())
-        await todo_.users.add(user)
+        await todo_.users.add(await User.get(id=user_id))
         await todo_.statuses.add(default_todo_status)
-        todo_ = await TodoPydantic.from_tortoise_orm(todo_)
-        # TODO: Add status
+        todo_ = await utils.serialize_todo(todo_, default_todo_status)
         return todo_
 
     except BaseORMException as e:
@@ -64,9 +58,9 @@ async def update_user_todo_status(user_id: int, todo_id: int, new_status_id: int
     todo = await user.todos.filter(id=todo_id).first()
     await todo.statuses.order_by("-created_at").first()
 
-    last_status_trace = await todo.todo_status_traces.order_by("-created_at").first()
-    last_status_trace.disabled_at = datetime.now()
-    await last_status_trace.save()
+    last_status_traces = await todo.todo_status_traces.order_by("-created_at").first()
+    last_status_traces.disabled_at = datetime.now()
+    await last_status_traces.save()
     await todo.statuses.add(new_todo_status)
 
     return await utils.serialize_todo(todo, new_todo_status)

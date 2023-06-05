@@ -413,6 +413,21 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
+name = "casbin"
+version = "1.19.0"
+description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python"
+category = "main"
+optional = false
+python-versions = ">=3.3"
+files = [
+    {file = "casbin-1.19.0-py3-none-any.whl", hash = "sha256:1c320d4788c87fac92f27e7aa9475c88d30a29c5fefd188da46913df6658de03"},
+    {file = "casbin-1.19.0.tar.gz", hash = "sha256:8c9240e4d239e89735a61b43ec1ca9392a21f97f72eda2c73972351760ea6ce8"},
+]
+
+[package.dependencies]
+simpleeval = ">=0.9.11"
+
+[[package]]
 name = "certifi"
 version = "2023.5.7"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1742,6 +1757,18 @@ testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8-2020", "ini2toml[l
 testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
 
 [[package]]
+name = "simpleeval"
+version = "0.9.13"
+description = "A simple, safe single expression evaluator library."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "simpleeval-0.9.13-py2.py3-none-any.whl", hash = "sha256:22a2701a5006e4188d125d34accf2405c2c37c93f6b346f2484b6422415ae54a"},
+    {file = "simpleeval-0.9.13.tar.gz", hash = "sha256:4a30f9cc01825fe4c719c785e3762623e350c4840d5e6855c2a8496baaa65fac"},
+]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -2162,4 +2189,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7396e42343d5460b4db13c21bd3d4448627c48ce5e62f5dc662204785d5e20a4"
+content-hash = "d59294d16c585ab4d02b13c5ff31f9dbf84c1f95e40a5db14c1c0b468f44459f"

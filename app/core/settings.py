@@ -32,6 +32,8 @@ class Settings(BaseSettings):
 
     LOG_FORMAT: str = "%(levelprefix)s %(asctime)s | %(message)s"
 
+    APP_TODO_DEFAULT_STATUS: str = "not-started"
+
     class Config:
         env_file = ENV_PATH
         case_sensitive = True

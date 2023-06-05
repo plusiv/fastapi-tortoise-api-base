@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from app.core.security import auth, jwt_handler as jwt
+from app.core.security import jwt_handler as jwt
+from app.database.crud import users
 from app.routers.v1 import ROUTE_PREFIX
 from app.pydantic_models.user import UserInfoPydantic
 from typing import Annotated
@@ -11,7 +12,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{ROUTE_PREFIX}/login")
 token_dep = Annotated[str, Depends(oauth2_scheme)]
 
 
-async def get_current_user(token: token_dep):
+async def get_current_user(token: token_dep) -> UserInfoPydantic:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials.",
@@ -24,7 +25,7 @@ async def get_current_user(token: token_dep):
     except Exception:
         raise credentials_exception
 
-    user = await auth.get_user(username=username)
+    user = await users.get_user(username=username)
     if not user:
         raise credentials_exception
     return user
@@ -38,4 +39,17 @@ async def get_current_active_user(
     return current_user
 
 
+# def get_authorized_todo_editor(
+#    todoId: int,
+#    enforcer: Enforcer = Depends(ac.get_todos_enforcer),
+#    user: UserInfoPydantic = Depends(get_current_active_user),
+# ) -> bool:
+#    sub = user
+#    obj = todos.get_todo(id=todoId)
+#    if enforcer.enforce(sub, obj):
+#        return True
+#    raise HTTPException(status_code=403)
+
+
 current_user = Annotated[UserInfoPydantic, Depends(get_current_active_user)]
+# authorized_user = Annotated[UserInfoPydantic, Depends(get_authorized_user)]

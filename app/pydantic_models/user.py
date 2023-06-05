@@ -12,4 +12,4 @@ class UserPydantic(pydantic_model_creator(User_DB_Model)):
 
 
 class UserInfoPydantic(UserPydantic):
-    role_info: RolePydantic = None
+    roles: list[RolePydantic] = None

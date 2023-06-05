@@ -10,14 +10,8 @@ from app.pydantic_models.todo import (
     TodoStatusPydanticList,
 )
 from tortoise.exceptions import BaseORMException
+from app.database.crud.utils import utils
 from datetime import datetime
-
-
-async def serialize_todo(todo: Todo, todo_status: TodoStatus) -> TodoPydantic:
-    todo_pydantic = await TodoPydantic.from_tortoise_orm(todo)
-    todo_pydantic.status = await TodoStatusPydantic.from_tortoise_orm(todo_status)
-
-    return todo_pydantic
 
 
 async def get_user_todos(
@@ -75,7 +69,7 @@ async def update_user_todo_status(user_id: int, todo_id: int, new_status_id: int
     await last_status_trace.save()
     await todo.statuses.add(new_todo_status)
 
-    return await serialize_todo(todo, new_todo_status)
+    return await utils.serialize_todo(todo, new_todo_status)
 
 
 async def get_status(status_id: int) -> TodoStatusPydantic | TodoStatusPydanticList:

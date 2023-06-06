@@ -49,7 +49,6 @@ async def authorize_todo_operation(
     sub = [role.slug for role in user.roles]
     obj = req.url.path
     act = req.method
-    print(sub, obj, act)
     if not enforcer.enforce(sub, obj, act):
         raise HTTPException(
             status_code=403,

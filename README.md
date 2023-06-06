@@ -47,3 +47,9 @@ To run tests you can enter:
 ```bash
 poetry run pytest
 ```
+
+### Pre-commit
+If you want to run pre-commit to make sure that you're doing a good jon, just run:
+```shell
+poetry run pre-commit run -a
+```

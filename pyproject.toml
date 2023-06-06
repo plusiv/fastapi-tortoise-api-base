@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fastapi-tortoise"
+name = "fastapi-tortoise-api-base"
 version = "0.1.0"
 description = ""
 authors = ["plusiv"]

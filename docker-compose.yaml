@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: api-base-fastapi
+    container_name: fastapi-toirtoise_api-base
     depends_on:
       database:
         condition: service_healthy
@@ -14,10 +14,11 @@ services:
       - "3000:3000"
     networks:
       - api
+      - databse
 
   database:
     image: mariadb
-    container_name: gob-do-database
+    container_name: database
     restart: always
     healthcheck:
       test: ["CMD", "mysql" ,"--password=root", "--user=root", "--execute=SHOW DATABASES"]
@@ -31,7 +32,6 @@ services:
       - MARIADB_USER=gobdo_user
       - MARIADB_PASSWORD=p@ssw0rd
     networks:
-      - api
       - database
 
   adminer:

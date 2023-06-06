@@ -1,4 +1,7 @@
 # FastAPI Template Project
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+[![GitHub Super-Linter](https://github.com/plusiv/fastapi-tortoise-api-base/actions/workflows/lint.yaml/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 
 This is a template project for building API applications using FastAPI, Poetry, and Tortoise ORM.
 

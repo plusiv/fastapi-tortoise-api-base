@@ -7,6 +7,13 @@ from tortoise.contrib.fastapi import register_tortoise
 init_loggers()
 
 app = FastAPI()
+
+register_tortoise(
+    app=app,
+    config=TORTOISE_ORM,
+    add_exception_handlers=True,
+)
+
 app.include_router(v1.router, prefix=v1_prefix)
 
 
@@ -14,10 +21,3 @@ app.include_router(v1.router, prefix=v1_prefix)
 @app.get("/ping", tags=["Health Check"])
 async def ping():
     return "pong"
-
-
-register_tortoise(
-    app=app,
-    config=TORTOISE_ORM,
-    add_exception_handlers=True,
-)

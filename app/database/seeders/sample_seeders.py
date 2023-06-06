@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from app.database.models import User, Role, Permission
+from app.core.settings import env
+from app.database.models import User, Role, TodoStatus
 from app.core.security.hashing import get_password_hash
 import random
 from faker import Faker
@@ -9,26 +10,11 @@ async def generate_seeders(number_of_users: int = 10, test_user: dict = None):
     f = Faker(["es_ES"])
 
     # Insert Roles
-    roles = {
-        "viewer": ["view"],
-        "editor": ["view", "update"],
-        "admin": ["view", "add", "update", "delete"],
-    }
-
-    roles_list = []
-    for role_name in roles:
-        role = await Role.create(title=role_name.capitalize(), slug=role_name)
-
-        # Insert Permission
-        permissions_list = []
-        for permission_name in roles.get(role_name):
-            permission = await Permission.get_or_create(
-                title=permission_name.capitalize(), slug=permission_name
-            )
-            permissions_list.append(permission[0])
-
-        roles_list.append(role)
-        await role.permission.add(*permissions_list)
+    roles = ["viewer", "editor"]
+    rolesModelList = [
+        await Role.create(title=role_name.capitalize(), slug=role_name)
+        for role_name in roles
+    ]
 
     # Insert Users
     sample_password = "sample"
@@ -48,4 +34,18 @@ async def generate_seeders(number_of_users: int = 10, test_user: dict = None):
             "sex": simple_profile.get("sex"),
             "birthdate": simple_profile.get("birthdate"),
         }
-        user = await User.create(**user, role=random.choice(roles_list))
+        user = await User.create(**user)
+        await user.roles.add(
+            *random.sample(
+                rolesModelList,
+                len(rolesModelList) - 1 if len(rolesModelList) > 1 else 1,
+            )
+        )
+
+    # Insert Default Todo Status
+    todo_statuses = [env.APP_TODO_DEFAULT_STATUS, "in-progress", "done"]
+
+    for todo_status in todo_statuses:
+        await TodoStatus.create(
+            name=todo_status.replace("-", " ").capitalize(), slug=todo_status
+        )

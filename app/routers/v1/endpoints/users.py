@@ -9,5 +9,5 @@ router = APIRouter()
 
 
 @router.get("/me", response_model=UserInfoPydantic)
-def get_user_info(current_user: current_user):
+async def get_user_info(current_user: current_user):
     return current_user

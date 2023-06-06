@@ -9,6 +9,7 @@ from tortoise import fields
 from enum import Enum
 
 
+# Enums
 class Sex(str, Enum):
     male = "M"
     female = "F"
@@ -41,7 +42,8 @@ class User(Model, TimestampMixin):
     last_login = fields.DatetimeField(null=True)
 
     # Relationships
-    role = fields.ForeignKeyField("models.Role", related_name="roles")
+    roles = fields.ManyToManyField("models.Role", related_name="users")
+    todos = fields.ManyToManyField("models.Todo", related_name="users")
 
     class Meta:
         table = "user"
@@ -54,22 +56,8 @@ class Role(Model, TimestampMixin, Describable):
     title = fields.CharField(max_length=50)
     slug = fields.CharField(max_length=50, unique=True)
 
-    # Relationships
-    permission = fields.ManyToManyField("models.Permission", related_name="permissions")
-
     class Meta:
         table = "role"
-
-    class PydanticMeta:
-        pass
-
-
-class Permission(Model, TimestampMixin, Describable):
-    title = fields.CharField(max_length=25)
-    slug = fields.CharField(max_length=25, unique=True)
-
-    class Meta:
-        table = "permission"
 
 
 class SentEmail(Model, Describable, Message):
@@ -78,6 +66,9 @@ class SentEmail(Model, Describable, Message):
     to_email = fields.CharField(max_length=320)
     template_name = fields.CharField(max_length=150, null=True)
     template_id = fields.CharField(max_length=50, null=True)
+
+    # Relationships
+    user = fields.ForeignKeyField("models.User", related_name="sent_emails")
 
     class Meta:
         table = "sent_email"
@@ -95,3 +86,39 @@ class SentSMS(Model, Describable, Message):
     # Max length based on Twilio recommendations.
     # see https://support.twilio.com/hc/en-us/articles/360033806753-Maximum-Message-Length-with-Twilio-Programmable-Messaging
     body = fields.CharField(max_length=320)
+    user = fields.ForeignKeyField("models.User", related_name="sent_smss")
+
+    class Meta:
+        table = "sent_sms"
+
+
+class Todo(Model, TimestampMixin, Describable):
+    title = fields.CharField(max_length=320)
+
+    # Relationships
+    statuses = fields.ManyToManyField(
+        "models.TodoStatus",
+        through="todo_status_trace",
+        related_name="todos",
+        forward_key="todo_status_id",
+        backward_key="todo_id",
+    )
+
+    class Meta:
+        table = "todo"
+
+
+class TodoStatus(Model, TimestampMixin, Describable):
+    name = fields.CharField(max_length=50, unique=True)
+    slug = fields.CharField(max_length=50, unique=True)
+
+    class Meta:
+        table = "todo_status"
+
+
+class TodoStatusTrace(Model, TimestampMixin):
+    todo = fields.ForeignKeyField("models.Todo")
+    todo_status = fields.ForeignKeyField("models.TodoStatus")
+
+    class Meta:
+        table = "todo_status_trace"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from app.core.security import jwt_handler as jwt
 from app.database.crud.users import authenticate_user
-from app.pydantic_models.token import TokenPydantic
+from app.pydantic_models.tokens import TokenPydantic
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm

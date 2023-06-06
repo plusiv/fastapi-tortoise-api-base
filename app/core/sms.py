@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import aiohttp
 from app.core.settings import env, log
-from app.pydantic_models.message import SentSMSPydantic
+from app.pydantic_models.messages import SentSMSPydantic
 
 
 async def send_sms(

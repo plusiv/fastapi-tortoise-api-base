@@ -2,8 +2,8 @@
 from tortoise.models import Model
 from datetime import datetime
 from app.database.models import User, Role, Todo, TodoStatus
-from app.pydantic_models.todo import TodoPydantic, TodoStatusPydantic
-from app.pydantic_models.user import UserInfoPydantic, RolePydantic
+from app.pydantic_models.todos import TodoPydantic, TodoStatusPydantic
+from app.pydantic_models.users import UserInfoPydantic, RolePydantic
 
 
 async def soft_delete(model: Model):

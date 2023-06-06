@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from app.pydantic_models.todo import (
+from app.pydantic_models.todos import (
     TodoPydantic,
     TodoPydanticList,
     TodoPydanticIn,
@@ -7,7 +7,7 @@ from app.pydantic_models.todo import (
     TodoStatusPydanticIn,
     TodoStatusPydanticList,
 )
-from app.pydantic_models.user import UserInfoPydanticList
+from app.pydantic_models.users import UserInfoPydanticList
 from app.routers.v1.dependencies import current_user, authorized_todo_user
 from app.database.crud.todos import (
     create_user_todo,

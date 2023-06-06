@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from app.database.models import Todo, TodoStatus, User
 from app.core.settings import env
-from app.pydantic_models.todo import (
+from app.pydantic_models.todos import (
     TodoPydantic,
     TodoPydanticIn,
     TodoPydanticList,
@@ -9,7 +9,7 @@ from app.pydantic_models.todo import (
     TodoStatusPydanticIn,
     TodoStatusPydanticList,
 )
-from app.pydantic_models.user import UserInfoPydanticList
+from app.pydantic_models.users import UserInfoPydanticList
 from tortoise.exceptions import BaseORMException
 from app.database.crud.utils import utils
 

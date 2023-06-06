@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from app.database.models import User
 from app.database.crud.utils import utils
-from app.pydantic_models.user import UserInfoPydantic
+from app.pydantic_models.users import UserInfoPydantic
 from app.core.security.hashing import verify_password
 from datetime import datetime
 

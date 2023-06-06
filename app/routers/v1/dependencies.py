@@ -3,7 +3,7 @@ from app.core.security import jwt_handler as jwt
 from app.core.security.access_control import access_control as ac
 from app.database.crud import users
 from app.routers.v1 import ROUTE_PREFIX
-from app.pydantic_models.user import UserInfoPydantic
+from app.pydantic_models.users import UserInfoPydantic
 from typing import Annotated
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer

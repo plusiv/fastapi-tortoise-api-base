@@ -1,0 +1,2 @@
+p, viewer, /api/v1/todos/*, GET
+p, editor, /api/v1/todos/*, (GET)|(POST)|(PATCH)|(PUT)|(DELETE)

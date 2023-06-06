@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from app.core.security import jwt_handler as jwt
+from app.core.security.access_control import access_control as ac
 from app.database.crud import users
 from app.routers.v1 import ROUTE_PREFIX
 from app.pydantic_models.user import UserInfoPydantic
 from typing import Annotated
-from fastapi import Depends, HTTPException, status
-
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
+from casbin import Enforcer
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{ROUTE_PREFIX}/login")
 token_dep = Annotated[str, Depends(oauth2_scheme)]
@@ -39,17 +41,21 @@ async def get_current_active_user(
     return current_user
 
 
-# def get_authorized_todo_editor(
-#    todoId: int,
-#    enforcer: Enforcer = Depends(ac.get_todos_enforcer),
-#    user: UserInfoPydantic = Depends(get_current_active_user),
-# ) -> bool:
-#    sub = user
-#    obj = todos.get_todo(id=todoId)
-#    if enforcer.enforce(sub, obj):
-#        return True
-#    raise HTTPException(status_code=403)
+async def authorize_todo_operation(
+    req: Request,
+    enforcer: Enforcer = Depends(ac.get_todos_enforcer),
+    user: UserInfoPydantic = Depends(get_current_active_user),
+):
+    sub = [role.slug for role in user.roles]
+    obj = req.url.path
+    act = req.method
+    print(sub, obj, act)
+    if not enforcer.enforce(sub, obj, act):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden: Insufficient rights to perform this action",
+        )
 
 
 current_user = Annotated[UserInfoPydantic, Depends(get_current_active_user)]
-# authorized_user = Annotated[UserInfoPydantic, Depends(get_authorized_user)]
+authorized_todo_user = Annotated[UserInfoPydantic, Depends(authorize_todo_operation)]

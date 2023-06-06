@@ -9,9 +9,9 @@ from app.pydantic_models.todo import (
     TodoStatusPydanticIn,
     TodoStatusPydanticList,
 )
+from app.pydantic_models.user import UserInfoPydanticList
 from tortoise.exceptions import BaseORMException
 from app.database.crud.utils import utils
-from datetime import datetime
 
 
 async def get_user_todos(
@@ -23,15 +23,13 @@ async def get_user_todos(
 
     if todo_id:
         todos = await todos.filter(id=todo_id).first().prefetch_related("statuses")
-        last_status = await todos.statuses.order_by("-created_at").first()
-        todo_pydantic = await utils.serialize_todo(todos, last_status)
+        todo_pydantic = await utils.serialize_todo(todos)
         return todo_pydantic
 
     await user.fetch_related("todos__statuses")
     todos_pydantic_list = []
     async for todo in user.todos:
-        last_status = await todo.statuses.order_by("-created_at").first()
-        todo_pydantic = await utils.serialize_todo(todo, last_status)
+        todo_pydantic = await utils.serialize_todo(todo)
         todos_pydantic_list.append(todo_pydantic)
 
     return TodoPydanticList(__root__=todos_pydantic_list)
@@ -56,11 +54,9 @@ async def update_user_todo_status(user_id: int, todo_id: int, new_status_id: int
     new_todo_status = await TodoStatus.get(id=new_status_id)
     user = await User.get(id=user_id)
     todo = await user.todos.filter(id=todo_id).first()
-    await todo.statuses.order_by("-created_at").first()
 
-    last_status_traces = await todo.todo_status_traces.order_by("-created_at").first()
-    last_status_traces.disabled_at = datetime.now()
-    await last_status_traces.save()
+    last_status_trace = await todo.todo_status_traces.order_by("-created_at").first()
+    await utils.soft_delete(last_status_trace)
     await todo.statuses.add(new_todo_status)
 
     return await utils.serialize_todo(todo, new_todo_status)
@@ -79,3 +75,33 @@ async def create_status(status: TodoStatusPydanticIn) -> TodoStatusPydantic:
     new_status = await TodoStatus.create(**status.dict())
 
     return await TodoStatusPydantic.from_tortoise_orm(new_status)
+
+
+async def add_user_to_todo(
+    owner_user_id: int, user_id: int, todo_id: int
+) -> TodoPydantic:
+    user = await User.get(id=owner_user_id)
+    todo = await user.todos.filter(id=todo_id).first()
+
+    await todo.users.add(await User.get(id=user_id))
+    return await utils.serialize_todo(todo)
+
+
+async def get_users_from_todo(owner_user_id: int, todo_id: int) -> UserInfoPydanticList:
+    user = await User.get(id=owner_user_id)
+    todo = await user.todos.filter(id=todo_id).first()
+
+    user_info_list = [await utils.serialize_user(user) async for user in todo.users]
+
+    return UserInfoPydanticList(__root__=user_info_list)
+
+
+async def remove_user_from_todo(
+    owner_user_id: int, user_id: int, todo_id
+) -> TodoPydantic:
+    user = await User.get(id=user_id)
+    todo = await user.todos.filter(id=todo_id).first()
+
+    await todo.users.remove(user)
+
+    return await utils.serialize_todo(todo)

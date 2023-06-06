@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from app.database.models import User
-from app.pydantic_models.user import UserInfoPydantic, RolePydantic
+from app.database.crud.utils import utils
+from app.pydantic_models.user import UserInfoPydantic
 from app.core.security.hashing import verify_password
 from datetime import datetime
 
@@ -9,12 +10,7 @@ async def get_user(username: str) -> UserInfoPydantic | None:
     user = await User.get_or_none(username=username)
 
     if user:
-        user_roles = await user.roles
-        user_roles_pydantic = [
-            await RolePydantic.from_tortoise_orm(user_role) for user_role in user_roles
-        ]
-        user_pydantic = await UserInfoPydantic.from_tortoise_orm(user)
-        user_pydantic.roles = user_roles_pydantic
+        user_pydantic = await utils.serialize_user(user)
         return user_pydantic
 
     return None

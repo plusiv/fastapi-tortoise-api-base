@@ -3,9 +3,11 @@ from app.database.models import User
 from app.database.crud.utils import utils
 from app.pydantic_models.users import UserInfoPydantic
 from app.core.security.hashing import verify_password
+from app.utils.utils import db_exceptions_handler
 from datetime import datetime
 
 
+@db_exceptions_handler
 async def get_user(username: str) -> UserInfoPydantic | None:
     user = await User.get_or_none(username=username)
 
@@ -16,6 +18,7 @@ async def get_user(username: str) -> UserInfoPydantic | None:
     return None
 
 
+@db_exceptions_handler
 async def authenticate_user(username: str, password: str) -> bool:
     user = await User.get_or_none(username=username)
 

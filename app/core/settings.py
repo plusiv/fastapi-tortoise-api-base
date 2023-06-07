@@ -8,7 +8,9 @@ ENV_PATH = ".env"
 
 class Settings(BaseSettings):
     ENV: str = "development"
-    APP_NAME: str = "fastapi-tortoise"
+    APP_NAME: str = "fastapi-tortoise-api-base"
+    LOG_FORMAT: str = "%(levelprefix)s %(asctime)s | %(message)s"
+    APP_TODO_DEFAULT_STATUS: str = "not-started"
 
     DATABASE_TYPE: str
     DATABASE_USER: str
@@ -30,9 +32,6 @@ class Settings(BaseSettings):
     TWILIO_API_URL: HttpUrl = None
     TWILIO_API_KEY: str = None
 
-    LOG_FORMAT: str = "%(levelprefix)s %(asctime)s | %(message)s"
-
-    APP_TODO_DEFAULT_STATUS: str = "not-started"
 
     class Config:
         env_file = ENV_PATH

@@ -56,3 +56,39 @@ If you want to run pre-commit to make sure that you're doing a good jon, just ru
 ```shell
 poetry run pre-commit run -a
 ```
+
+## Tech Stack + Features
+
+### Frameworks
+- [FastApi](https://fastapi.tiangolo.com/lo/) – A modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
+
+### Database + ORM
+- [MySQL](https://www.mysql.com/) - An open-source relational database management system.
+- [Tortoise ORM](https://tortoise.github.io/) - Tortoise ORM is an easy-to-use `asyncio` ORM (Object Relational Mapper) inspired by Django.
+
+### Storage
+- [Minio]() - __TODO__
+
+## Access Control
+ - [Casbin](https://github.com/casbin/pycasbin) - An authorization library that supports access control models like ACL, RBAC, ABAC for multiple Languajes.
+
+## Code Quality
+- [Super Linter (Github Action)](https://github.com/marketplace/actions/super-linter) - A simple combination of various linters, written in bash, to help validate your source code. Linters are:
+    - [Flake8](https://flake8.pycqa.org/en/latest) - A tool for Style Guide Enforcement.
+    - [Black](https://github.com/psf/black) - A Python code formatter.
+    - [Hadolint (Dockerfile)](https://github.com/hadolint/hadolint) - A smarter Dockerfile linter that helps to build best practice Docker images.
+    - Github Actions - A linter for Github Actions.
+    - Yaml - A Yaml files linter.
+    - Markdown - A Markdown linter.
+- [Pre Commit](https://pre-commit.com/) - Git hook scripts are useful for identifying simple issues before submission to code review.
+    - check-ast - simply checks whether the files parse as valid python.
+    - check-toml - checks toml files for parseable syntax.
+    - detect-private-key - detects the presence of private keys.
+    - end-of-file-fixer - ensures that a file is either empty, or ends with one newline.
+    - fix-encoding-pragma - adds `# -*- coding: utf-8 -*-` to the top of python files.
+    - name-tests-test - verifies that test files are named correctly.
+    - trailing-whitespace - trims trailing whitespace.
+    - autoflake - removes unused imports and unused variables from Python code.
+    - black - A Python code formatter.
+    - flake8 - A tool for Style Guide Enforcement.
+    - hadolint - A smarter Dockerfile linter that helps to build best practice Docker images.

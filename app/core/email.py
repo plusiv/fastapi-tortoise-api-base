@@ -71,7 +71,7 @@ async def send_email(
 async def send_wellcome(
     email_to: str,
     first_name: str,
-    user_id: str,
+    user_id: int | str,
     template_id: str = env.SENDGRID_NEW_USER_TEMPLATE_ID,
 ) -> SentEmailPydantic:
     subject = "Verfication Code"

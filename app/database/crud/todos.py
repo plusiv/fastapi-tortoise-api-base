@@ -88,7 +88,9 @@ async def add_user_to_todo(
 
 
 @db_exceptions_handler
-async def get_users_from_todo(owner_user_id: int | str, todo_id: int) -> UserInfoPydanticList:
+async def get_users_from_todo(
+    owner_user_id: int | str, todo_id: int
+) -> UserInfoPydanticList:
     user = await User.get(id=owner_user_id)
     todo = await user.todos.filter(id=todo_id).first()
 

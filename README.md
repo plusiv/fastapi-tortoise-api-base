@@ -74,7 +74,7 @@ poetry run pre-commit run -a
 
 ## Code Quality
 - [Super Linter (Github Action)](https://github.com/marketplace/actions/super-linter) - A simple combination of various linters, written in bash, to help validate your source code. Linters are:
-    - [Flake8](https://flake8.pycqa.org/en/latest) - A tool for Style Guide Enforcement.
+    - [Ruff](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust.
     - [Black](https://github.com/psf/black) - A Python code formatter.
     - [Hadolint (Dockerfile)](https://github.com/hadolint/hadolint) - A smarter Dockerfile linter that helps to build best practice Docker images.
     - Github Actions - A linter for Github Actions.
@@ -88,7 +88,6 @@ poetry run pre-commit run -a
     - fix-encoding-pragma - adds `# -*- coding: utf-8 -*-` to the top of python files.
     - name-tests-test - verifies that test files are named correctly.
     - trailing-whitespace - trims trailing whitespace.
-    - autoflake - removes unused imports and unused variables from Python code.
     - black - A Python code formatter.
-    - flake8 - A tool for Style Guide Enforcement.
+    - ruff - An extremely fast Python linter, written in Rust.
     - hadolint - A smarter Dockerfile linter that helps to build best practice Docker images.

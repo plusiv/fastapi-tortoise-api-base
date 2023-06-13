@@ -67,7 +67,7 @@ poetry run pre-commit run -a
 - [Tortoise ORM](https://tortoise.github.io/) - Tortoise ORM is an easy-to-use `asyncio` ORM (Object Relational Mapper) inspired by Django.
 
 ### Storage
-- [Minio]() - __TODO__
+- Minio - __TODO__
 
 ### Access Control
  - [Casbin](https://github.com/casbin/pycasbin) - An authorization library that supports access control models like ACL, RBAC, ABAC for multiple Languajes.

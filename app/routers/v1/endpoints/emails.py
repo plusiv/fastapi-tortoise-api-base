@@ -12,7 +12,9 @@ router = APIRouter()
 @router.post("/test", response_model=SentEmailPydantic)
 async def send_test_email(current_user: current_user, email_destination: str):
     sent_email = await email.send_wellcome(
-        current_user.first_name, email_to=email_destination
+        first_name=current_user.first_name,
+        email_to=email_destination,
+        user_id=current_user.id,
     )
 
     if not sent_email.sent_at:

@@ -36,7 +36,6 @@ jobs:
         uses: super-linter/super-linter/slim@v5
         env:
           VALIDATE_ALL_CODEBASE: false
-          VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_DOCKERFILE_HADOLINT: true
           VALIDATE_GITHUB_ACTIONS: true
@@ -44,3 +43,8 @@ jobs:
           VALIDATE_MARKDOWN: true
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint Python Code Base with Ruff
+        uses: chartboost/ruff-action@v1
+        with:
+          src: "./app"

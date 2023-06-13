@@ -69,10 +69,10 @@ poetry run pre-commit run -a
 ### Storage
 - [Minio]() - __TODO__
 
-## Access Control
+### Access Control
  - [Casbin](https://github.com/casbin/pycasbin) - An authorization library that supports access control models like ACL, RBAC, ABAC for multiple Languajes.
 
-## Code Quality
+### Code Quality
 - [Super Linter (Github Action)](https://github.com/marketplace/actions/super-linter) - A simple combination of various linters, written in bash, to help validate your source code. Linters are:
     - [Ruff](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust.
     - [Black](https://github.com/psf/black) - A Python code formatter.
@@ -93,8 +93,17 @@ poetry run pre-commit run -a
     - hadolint - A smarter Dockerfile linter that helps to build best practice Docker images.
 
 ## Project Structure
+This diagram assumes that all folder is a Python module and all of them have a hidden `__init__.py` file.
+<!-- You can generate this tree diagram by running: tree -I __pycache__ -I __init__.py -I .git -I .env -I .ruff_cache -I migrations -I .pytest_cache -a . -->
+
 ```
 .
+├── .env.example
+├── .github
+│   └── workflows
+│       └── lint.yaml
+├── .gitignore
+├── .pre-commit-config.yaml
 ├── Dockerfile
 ├── LICENSE
 ├── README.md
@@ -117,9 +126,6 @@ poetry run pre-commit run -a
 │   │   │   └── utils
 │   │   │       └── utils.py
 │   │   ├── db_seed.py
-│   │   ├── migrations
-│   │   │   └── models
-│   │   │       └── 0_20230605180712_init.py
 │   │   ├── models.py
 │   │   └── seeders
 │   │       └── sample_seeders.py
@@ -152,3 +158,29 @@ poetry run pre-commit run -a
     │           └── user_test.py
     └── conftest.py
 ```
+
+### Application folder
+```
+app
+├── core
+├── database
+├── main.py
+├── pydantic_models
+├── routers
+└── utils
+```
+The `app` folder is the root application folder, there you are goin to found all principal modules:
+- `core`: All core modules of the application, such as email, security module, access control and so on.
+- `database`: Handles everything about database, such as [CRUDS](https://www.sumologic.com/glossary/crud/), [Tortoise Models](https://tortoise.github.io/models.html), and some sample seeders.
+- `main.py`: Main app files, it initializes the entire application.
+- `pydantic_models`: This folder contains all Pydantic Models for data validation in all API information exchanges.
+- `routers`: All API endpoints versioned.
+- `utils`: Helper functions.
+
+### CI
+```
+├── .github
+   └── workflows
+       └── lint.yaml
+```
+This project is configured to use [Github Actions](https://github.com/features/actions), and all workflows file can be found in `.github/workflows` as spected.

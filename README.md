@@ -3,7 +3,7 @@
 [![GitHub Super-Linter](https://github.com/plusiv/fastapi-tortoise-api-base/actions/workflows/lint.yaml/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 
-This is a template project for building API applications using FastAPI, Poetry, and Tortoise ORM.
+This is a template project for building API applications using FastAPI, Poetry, and Tortoise ORM. The base project is about a To-Do application, so, feel free of removing every line of code outside of your needs.
 
 ## Prerequisites
 

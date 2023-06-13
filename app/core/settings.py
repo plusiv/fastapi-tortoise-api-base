@@ -9,6 +9,7 @@ ENV_PATH = ".env"
 class Settings(BaseSettings):
     ENV: str = "development"
     APP_NAME: str = "fastapi-tortoise-api-base"
+    APP_VERSION: str = "0.1.0"
     LOG_FORMAT: str = "%(levelprefix)s %(asctime)s | %(message)s"
     APP_TODO_DEFAULT_STATUS: str = "not-started"
 
@@ -23,15 +24,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    SENDGRID_API_URL: HttpUrl = None
-    SENDGRID_API_KEY: str = None
-    SENDGRID_SENDER: EmailStr = None
-    SENDGRID_NEW_USER_TEMPLATE_ID: str = None
+    SENDGRID_API_URL: HttpUrl | None = None
+    SENDGRID_API_KEY: str | None = None
+    SENDGRID_SENDER: EmailStr | None = None
+    SENDGRID_NEW_USER_TEMPLATE_ID: str | None = None
 
-    TWILIO_FROM_NUMBER: str = None
-    TWILIO_API_URL: HttpUrl = None
-    TWILIO_API_KEY: str = None
-
+    TWILIO_FROM_NUMBER: str | None = None
+    TWILIO_API_URL: HttpUrl | None = None
+    TWILIO_API_KEY: str | None = None
 
     class Config:
         env_file = ENV_PATH

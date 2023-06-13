@@ -91,3 +91,64 @@ poetry run pre-commit run -a
     - black - A Python code formatter.
     - ruff - An extremely fast Python linter, written in Rust.
     - hadolint - A smarter Dockerfile linter that helps to build best practice Docker images.
+
+## Project Structure
+```
+.
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── app
+│   ├── core
+│   │   ├── email.py
+│   │   ├── security
+│   │   │   ├── access_control
+│   │   │   │   ├── access_control.py
+│   │   │   │   ├── model.conf
+│   │   │   │   └── policies.csv
+│   │   │   ├── hashing.py
+│   │   │   └── jwt_handler.py
+│   │   ├── settings.py
+│   │   └── sms.py
+│   ├── database
+│   │   ├── crud
+│   │   │   ├── todos.py
+│   │   │   ├── users.py
+│   │   │   └── utils
+│   │   │       └── utils.py
+│   │   ├── db_seed.py
+│   │   ├── migrations
+│   │   │   └── models
+│   │   │       └── 0_20230605180712_init.py
+│   │   ├── models.py
+│   │   └── seeders
+│   │       └── sample_seeders.py
+│   ├── main.py
+│   ├── pydantic_models
+│   │   ├── messages.py
+│   │   ├── todos.py
+│   │   ├── tokens.py
+│   │   └── users.py
+│   ├── routers
+│   │   └── v1
+│   │       ├── api.py
+│   │       ├── dependencies.py
+│   │       └── endpoints
+│   │           ├── emails.py
+│   │           ├── login.py
+│   │           ├── sms.py
+│   │           ├── todos.py
+│   │           └── users.py
+│   └── utils
+│       └── utils.py
+├── docker-compose.yaml
+├── poetry.lock
+├── pyproject.toml
+└── tests
+    ├── api
+    │   └── endpoints
+    │       ├── ping_test.py
+    │       └── v1
+    │           └── user_test.py
+    └── conftest.py
+```

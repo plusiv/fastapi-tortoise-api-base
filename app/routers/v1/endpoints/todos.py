@@ -85,7 +85,7 @@ async def add_todo_user(
     current_user: current_user,
     is_authorized: authorized_todo_user,
     todo_id: int,
-    user_id: int,
+    user_id: int | str,
 ):
     return await add_user_to_todo(
         owner_user_id=current_user.id, user_id=user_id, todo_id=todo_id
@@ -104,7 +104,7 @@ async def remove_todo_user(
     current_user: current_user,
     is_authorized: authorized_todo_user,
     todo_id: int,
-    user_id: int,
+    user_id: int | str,
 ):
     return await remove_user_from_todo(
         owner_user_id=current_user.id, user_id=user_id, todo_id=todo_id

@@ -16,7 +16,7 @@ from app.utils.utils import db_exceptions_handler
 
 @db_exceptions_handler
 async def get_user_todos(
-    user_id: int, todo_id: int = None
+    user_id: int | str, todo_id: int = None
 ) -> TodoPydanticList | TodoPydantic:
     user = await User.get(id=user_id)
     todos = user.todos
@@ -37,7 +37,7 @@ async def get_user_todos(
 
 
 @db_exceptions_handler
-async def create_user_todo(user_id: int, todo: TodoPydanticIn) -> TodoPydantic:
+async def create_user_todo(user_id: int | str, todo: TodoPydanticIn) -> TodoPydantic:
     default_todo_status = await TodoStatus.get(slug=env.APP_TODO_DEFAULT_STATUS)
     todo_ = await Todo.create(**todo.dict())
     await todo_.users.add(await User.get(id=user_id))
@@ -47,7 +47,7 @@ async def create_user_todo(user_id: int, todo: TodoPydanticIn) -> TodoPydantic:
 
 
 @db_exceptions_handler
-async def update_user_todo_status(user_id: int, todo_id: int, new_status_id: int):
+async def update_user_todo_status(user_id: int | str, todo_id: int, new_status_id: int):
     new_todo_status = await TodoStatus.get(id=new_status_id)
     user = await User.get(id=user_id)
     todo = await user.todos.filter(id=todo_id).first()
@@ -78,7 +78,7 @@ async def create_status(status: TodoStatusPydanticIn) -> TodoStatusPydantic:
 
 @db_exceptions_handler
 async def add_user_to_todo(
-    owner_user_id: int, user_id: int, todo_id: int
+    owner_user_id: int | str, user_id: int | str, todo_id: int
 ) -> TodoPydantic:
     user = await User.get(id=owner_user_id)
     todo = await user.todos.filter(id=todo_id).first()
@@ -88,7 +88,7 @@ async def add_user_to_todo(
 
 
 @db_exceptions_handler
-async def get_users_from_todo(owner_user_id: int, todo_id: int) -> UserInfoPydanticList:
+async def get_users_from_todo(owner_user_id: int | str, todo_id: int) -> UserInfoPydanticList:
     user = await User.get(id=owner_user_id)
     todo = await user.todos.filter(id=todo_id).first()
 
@@ -99,7 +99,7 @@ async def get_users_from_todo(owner_user_id: int, todo_id: int) -> UserInfoPydan
 
 @db_exceptions_handler
 async def remove_user_from_todo(
-    owner_user_id: int, user_id: int, todo_id
+    owner_user_id: int | str, user_id: int | str, todo_id
 ) -> TodoPydantic:
     user = await User.get(id=user_id)
     todo = await user.todos.filter(id=todo_id).first()

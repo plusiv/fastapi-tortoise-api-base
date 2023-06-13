@@ -96,7 +96,7 @@ poetry run pre-commit run -a
 This diagram assumes that all folder is a Python module and all of them have a hidden `__init__.py` file.
 <!-- You can generate this tree diagram by running: tree -I __pycache__ -I __init__.py -I .git -I .env -I .ruff_cache -I migrations -I .pytest_cache -a . -->
 
-```
+```shell
 .
 ├── .env.example
 ├── .github
@@ -160,7 +160,7 @@ This diagram assumes that all folder is a Python module and all of them have a h
 ```
 
 ### Application folder
-```
+```shell
 app
 ├── core
 ├── database
@@ -178,9 +178,9 @@ The `app` folder is the root application folder, there you are goin to found all
 - `utils`: Helper functions.
 
 ### CI
-```
-├── .github
-   └── workflows
-       └── lint.yaml
+```shell
+.github
+└── workflows
+    └── lint.yaml
 ```
 This project is configured to use [Github Actions](https://github.com/features/actions), and all workflows file can be found in `.github/workflows` as spected.

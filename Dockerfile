@@ -1,12 +1,12 @@
 #################### Base ####################
-ARG PYTHON_VERSION=3.10
+ARG PYTHON_VERSION=3.11
 FROM python:${PYTHON_VERSION}-slim AS base
 
 ARG POETRY_VERSION = 1.4.2
 
-ENV WORK_DIR=/usr/app \
-    PYTHON_PATH="${WORK_DIR}/venv/bin" \
-    PATH=${PYTHON_PATH}:${PATH} \
+ENV WORK_DIR=/usr/app
+ENV PYTHON_PATH="${WORK_DIR}/venv/bin"
+ENV PATH=${PYTHON_PATH}:${PATH} \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=off \
@@ -27,6 +27,8 @@ ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 #################### deps ####################
 FROM base as deps
 
+# Avoid DL4006 warning. See https://github.com/hadolint/hadolint/wiki/DL4006#rationale
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Install Poetry and its dependencies
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
@@ -48,8 +50,8 @@ FROM base as development
 WORKDIR $PYSETUP_PATH
 
 # copy in our built poetry + venv
-COPY --from=builder-base $POETRY_HOME $POETRY_HOME
-COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
+COPY --from=base $POETRY_HOME $POETRY_HOME
+COPY --from=base $PYSETUP_PATH $PYSETUP_PATH
 
 # quicker install as runtime deps are already installed
 RUN poetry install
@@ -71,9 +73,9 @@ ENV GROUP_NAME=python
 ENV FASTAPI_ENV=production
 
 RUN groupadd -g ${GID} ${GROUP_NAME} && \
-    useradd -r -u ${UID} -g ${GROUP_NAME} ${USER_NAME}
+    useradd -l -r -u ${UID} -g ${GROUP_NAME} ${USER_NAME}
 
-COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
+COPY --from=base $PYSETUP_PATH $PYSETUP_PATH
 COPY ./api ${WORKDIR}
 
 WORKDIR ${WORK_DIR}

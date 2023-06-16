@@ -24,6 +24,7 @@ async def serialize_todo(todo: Todo, todo_status: TodoStatus = None) -> TodoPyda
 
 async def serialize_user(user: User, roles: list[Role] = []) -> UserInfoPydantic:
     user_pydantic = await UserInfoPydantic.from_tortoise_orm(user)
+    user_roles = roles
     if not roles:
         user_roles = await user.roles
 

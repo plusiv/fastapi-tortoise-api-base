@@ -6,15 +6,33 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: fastapi-toirtoise_api-base
+    container_name: consultas-prm-api
+    volumes:
+      - ./.env:/usr/app/.env
     depends_on:
       database:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "8001:8000"
     networks:
       - api
-      - databse
+      - database
+
+  api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: consultas-prm-api-dev
+    volumes:
+      - ./.env:/usr/app/.env
+      - ./pyproject.toml:/usr/app/pyproject.toml
+      - ./app:/usr/app/app
+    ports:
+      - "8001:8000"
+    networks:
+      - api
+      - database
 
   database:
     image: mariadb

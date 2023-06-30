@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: consultas-prm-api
+    container_name: fastapi-tortoise-api-base-dev
     volumes:
       - ./.env:/usr/app/.env
     depends_on:
@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
-    container_name: consultas-prm-api-dev
+    container_name: fastapi-tortoise-api-base-dev
     volumes:
       - ./.env:/usr/app/.env
       - ./pyproject.toml:/usr/app/pyproject.toml

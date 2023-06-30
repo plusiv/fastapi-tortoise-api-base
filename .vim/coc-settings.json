@@ -1,0 +1,9 @@
+{
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "poetry run black",
+    "python.linting.enabled": true,
+    "python.linting.ruffEnabled": true,
+    "python.pythonPath": "poetry run python",
+    "pyright.organizeimports.provider": "ruff",
+    "pyright.testing.provider": "pytest"
+}

@@ -1,85 +1,63 @@
+ARG POETRY_VERSION=1.4.2
 #################### Base ####################
 ARG PYTHON_VERSION=3.11
 FROM python:${PYTHON_VERSION}-slim AS base
 
-ARG POETRY_VERSION = 1.4.2
-
-ENV WORK_DIR=/usr/app
-ENV PYTHON_PATH="${WORK_DIR}/venv/bin"
-ENV PATH=${PYTHON_PATH}:${PATH} \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
-    POETRY_VERSION=${POETRY_VERSION} \
-    POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
-    POETRY_NO_INTERACTION=1 \
-    PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="/opt/pysetup/.venv" \
-    PORT=3000
-
-# prepend poetry and venv to path
-ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
-
-
-#################### deps ####################
-FROM base as deps
-
-# Avoid DL4006 warning. See https://github.com/hadolint/hadolint/wiki/DL4006#rationale
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-# Install Poetry and its dependencies
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
-        curl \
-        build-essential \
-    && curl -sSL https://install.python-poetry.org | python3 -
-
-WORKDIR ${PYSETUP_PATH}
-
-COPY poetry.lock pyproject.toml ./
-
-# Install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
-RUN poetry install --no-dev
-
-
-#################### development ####################
-FROM base as development
-
-WORKDIR $PYSETUP_PATH
-
-# copy in our built poetry + venv
-COPY --from=base $POETRY_HOME $POETRY_HOME
-COPY --from=base $PYSETUP_PATH $PYSETUP_PATH
-
-# quicker install as runtime deps are already installed
-RUN poetry install
-
-WORKDIR ${WORK_DIR}
-
-EXPOSE ${PORT}
-
-CMD ["uvicorn", "--reload", "main:app"]
-
-
-#################### production ####################
-FROM base as production
-
-ENV UID=1112
-ENV GID=1112
-ENV USER_NAME=python
-ENV GROUP_NAME=python
-ENV FASTAPI_ENV=production
+ENV UID=1112 \
+    GID=1112 \
+    USER_NAME=python \
+    GROUP_NAME=python \
+    WORK_DIR=/usr/app \
+    TEMP_DIR_PATH=/tmp \
+    PORT=8000
 
 RUN groupadd -g ${GID} ${GROUP_NAME} && \
     useradd -l -r -u ${UID} -g ${GROUP_NAME} ${USER_NAME}
 
-COPY --from=base $PYSETUP_PATH $PYSETUP_PATH
-COPY ./api ${WORKDIR}
+
+#################### Requirements generation ####################
+ARG POETRY_VERSION
+FROM base AS requirements-stage
+
+
+WORKDIR ${TEMP_DIR_PATH}
+
+COPY ./pyproject.toml ./poetry.lock* ${TEMP_DIR_PATH}/
+
+RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}" && \
+    poetry export -f requirements.txt --output requirements.txt --without-hashes && \
+    poetry export -f requirements.txt --output requirements.dev.txt --without-hashes --with dev
+
+
+#################### development ####################
+ARG POETRY_VERSION
+FROM base AS development
+
+ENV ENV=development
 
 WORKDIR ${WORK_DIR}
 
+COPY --from=requirements-stage ${TEMP_DIR_PATH}/requirements.dev.txt ${WORK_DIR}/requirements.txt
+
+RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}" && \
+    pip install --no-cache-dir --upgrade -r "${WORK_DIR}/requirements.txt"
+
+EXPOSE ${PORT}
+
+
+#################### production ####################
+FROM base AS production
+
+ENV ENV=production
+
+WORKDIR ${WORK_DIR}
+
+COPY --from=requirements-stage ${TEMP_DIR_PATH}/requirements.txt ${WORK_DIR}/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r "${WORK_DIR}/requirements.txt"
+
+COPY ./app ${WORK_DIR}/app
+
+EXPOSE ${PORT}
 USER ${USER_NAME}
 
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app"]
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "app.main:app"]

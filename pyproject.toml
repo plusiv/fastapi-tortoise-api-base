@@ -23,7 +23,7 @@ casbin = "^1.19.0"
 
 [tool.poetry.group.dev.dependencies]
 tortoise-cli = "^0.1.2"
-faker = "^18.9.0"
+faker = "^19.1.0"
 aerich = "^0.7.1"
 black = "^23.3.0"
 pre-commit = "^3.3.3"

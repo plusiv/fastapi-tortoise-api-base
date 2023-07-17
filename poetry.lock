@@ -738,13 +738,13 @@ idna = ">=2.0.0"
 
 [[package]]
 name = "faker"
-version = "18.10.1"
+version = "19.1.0"
 description = "Faker is a Python package that generates fake data for you."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "Faker-18.10.1-py3-none-any.whl", hash = "sha256:633b278caa3ec239463f9139c74da2607c8da5710e56d5d7d30fc8a7440104c4"},
-    {file = "Faker-18.10.1.tar.gz", hash = "sha256:d9f363720c4a6cf9884c6c3e26e2ce26266ffe5d741a9bc7cb9256779bc62190"},
+    {file = "Faker-19.1.0-py3-none-any.whl", hash = "sha256:4b7d5cd0c898f0b64f88fbf0a35aac66762f2273446ba4a4e459985a2e5c8f8c"},
+    {file = "Faker-19.1.0.tar.gz", hash = "sha256:d1eb772faf4a7c458c90b19d3626c40ae3460bd665ad7f5fb7b089e31d1a6dcf"},
 ]
 
 [package.dependencies]
@@ -2073,4 +2073,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5e1a7287439ce2d337443d71644140dfb05e4158c9817ab02cf2e6b2c2ba3ef2"
+content-hash = "197a0b58543f7d5b265ee1dbfa16bcfc958e261680f131634e26bff6eda1f864"

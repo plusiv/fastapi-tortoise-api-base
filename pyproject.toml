@@ -18,7 +18,7 @@ python-multipart = "^0.0.6"
 aiohttp = "^3.8.4"
 aiodns = "^3.0.0"
 email-validator = "^2.0.0.post2"
-casbin = "^1.19.0"
+casbin = "^1.22.0"
 
 
 [tool.poetry.group.dev.dependencies]

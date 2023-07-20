@@ -15,7 +15,7 @@ python-dotenv = "^1.0.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.6"
-aiohttp = "^3.8.4"
+aiohttp = "^3.8.5"
 aiodns = "^3.0.0"
 email-validator = "^2.0.0.post2"
 casbin = "^1.19.0"

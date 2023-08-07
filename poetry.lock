@@ -395,13 +395,13 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "casbin"
-version = "1.19.0"
+version = "1.23.0"
 description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python"
 optional = false
 python-versions = ">=3.3"
 files = [
-    {file = "casbin-1.19.0-py3-none-any.whl", hash = "sha256:1c320d4788c87fac92f27e7aa9475c88d30a29c5fefd188da46913df6658de03"},
-    {file = "casbin-1.19.0.tar.gz", hash = "sha256:8c9240e4d239e89735a61b43ec1ca9392a21f97f72eda2c73972351760ea6ce8"},
+    {file = "casbin-1.23.0-py3-none-any.whl", hash = "sha256:35eee8b7af832bb54e867f627580b0c8d181b0447ea87e7675af888fcb649db4"},
+    {file = "casbin-1.23.0.tar.gz", hash = "sha256:66b938a17e1b690f8b0faff3b3a9994fcaa81e569d07b66b5b422c6a62170b4b"},
 ]
 
 [package.dependencies]
@@ -2073,4 +2073,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5e1a7287439ce2d337443d71644140dfb05e4158c9817ab02cf2e6b2c2ba3ef2"
+content-hash = "77bf82b8dd45735ee9f7d107fb20ba03a870e39ce0546e4146d1ad80524ff11a"

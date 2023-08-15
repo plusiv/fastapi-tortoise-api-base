@@ -8,29 +8,29 @@ packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-uvicorn = {extras = ["standard"], version = "^0.22.0"}
-fastapi = "^0.99.0"
-tortoise-orm = {extras = ["asyncmy"], version = "^0.19.3"}
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+fastapi = "^0.101.1"
+tortoise-orm = {extras = ["asyncmy"], version = "^0.20.0"}
 python-dotenv = "^1.0.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.6"
-aiohttp = "^3.8.4"
+aiohttp = "^3.8.5"
 aiodns = "^3.0.0"
 email-validator = "^2.0.0.post2"
-casbin = "^1.19.0"
+casbin = "^1.23.1"
 
 
 [tool.poetry.group.dev.dependencies]
 tortoise-cli = "^0.1.2"
-faker = "^18.9.0"
-aerich = "^0.7.1"
-black = "^23.3.0"
+faker = "^19.3.0"
+aerich = "^0.7.2"
+black = "^23.7.0"
 pre-commit = "^3.3.3"
 httpx = "^0.24.1"
-pytest = "^7.3.1"
+pytest = "^7.4.0"
 asgi-lifespan = "^2.1.0"
-ruff = "^0.0.275"
+ruff = "^0.0.284"
 
 [tool.ruff]
 ignore = ["E501"]

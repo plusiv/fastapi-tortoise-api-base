@@ -18,8 +18,8 @@ Make sure you have the following installed before setting up the project:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/plusiv/fastapi-tortoise.git
-   cd fastapi-tortoise
+   git clone https://github.com/plusiv/fastapi-tortoise-api-base.git
+   cd fastapi-tortoise-api-base
    ````
 
 2. Install the project dependencies using Poetry:

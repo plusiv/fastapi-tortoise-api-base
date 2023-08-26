@@ -25,14 +25,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    SENDGRID_API_URL: HttpUrl | None = None
-    SENDGRID_API_KEY: str | None = None
+    SENDGRID_API_URL: HttpUrl = HttpUrl("https://api.sendgrid.com/v3")
+    SENDGRID_API_KEY: str = ""
     SENDGRID_SENDER: EmailStr | None = None
     SENDGRID_NEW_USER_TEMPLATE_ID: str = ""
 
-    TWILIO_FROM_NUMBER: str | None = None
-    TWILIO_API_URL: HttpUrl | None = None
-    TWILIO_API_KEY: str | None = None
+    TWILIO_FROM_NUMBER: str = ""
+    TWILIO_API_URL: HttpUrl = HttpUrl("https://api.twilio.com/2010-04-01")
+    TWILIO_API_KEY: str = ""
 
     model_config = SettingsConfigDict(case_sensitive=True, env_file=ENV_PATH)
 

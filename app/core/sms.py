@@ -11,7 +11,7 @@ async def send_sms(
 ) -> PydanticModel[SentSMSPydantic]:
     data = {
         "Body": body,
-        "From": env.TWILIO_FROM_NUMBER,
+        "From": number_from,
         "To": number_to,
     }
 

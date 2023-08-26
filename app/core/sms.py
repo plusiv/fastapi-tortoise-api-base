@@ -2,11 +2,13 @@
 import aiohttp
 from app.core.settings import env, log
 from app.pydantic_models.messages import SentSMSPydantic
+from app.database.models import SentSMS
+from tortoise.contrib.pydantic.base import PydanticModel
 
 
 async def send_sms(
     number_to: str, body: str = "", number_from: str = env.TWILIO_FROM_NUMBER
-) -> SentSMSPydantic:
+) -> PydanticModel[SentSMSPydantic]:
     data = {
         "Body": body,
         "From": env.TWILIO_FROM_NUMBER,
@@ -15,10 +17,10 @@ async def send_sms(
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.post(env.TWILIO_API_URL, json=data):
+            async with session.post(str(env.TWILIO_API_URL), json=data):
                 ...
 
-        sent_sms = await SentSMSPydantic.create(
+        sent_sms = await SentSMS.create(
             from_sms=data.get("FROM"), to_sms=data.get("TO"), body=data.get("Body")
         )
 
@@ -31,12 +33,12 @@ async def send_sms(
         log.error("Too many redirects")
     except aiohttp.ClientResponseError as e:
         log.error(f"A client response error has occourred {e}")
-    except aiohttp.ClientError as e:
-        log.error(f"A client error has occourred: {e}")
     except aiohttp.ClientConnectionError as e:
         log.error(f"A client connection error has occourred {e}")
+    except aiohttp.ClientError as e:
+        log.error(f"A client error has occourred: {e}")
 
-    sent_sms = await SentSMSPydantic.create(
+    sent_sms = await SentSMS.create(
         from_sms=data.get("FROM"),
         to_sms=data.get("TO"),
         body=data.get("Body"),

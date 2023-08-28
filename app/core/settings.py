@@ -3,6 +3,7 @@ import uvicorn.logging as uvicorn_logging
 import logging
 from pydantic import EmailStr, HttpUrl, ValidationError
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from tortoise import Tortoise
 
 ENV_PATH = ".env"
 
@@ -62,6 +63,9 @@ try:
             },
         },
     }
+
+    # Early init tortoise models
+    Tortoise.init_models(["app.database.models"], "models")
 
     SENDGRID_API_HEADERS = {
         "Authorization": f"Bearer {env.SENDGRID_API_KEY}",

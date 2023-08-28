@@ -6,7 +6,7 @@ import random
 from faker import Faker
 
 
-async def generate_seeders(number_of_users: int = 10, test_user: dict = None):
+async def generate_seeders(number_of_users: int = 10, test_user: dict | None = None):
     f = Faker(["es_ES"])
 
     # Insert Roles

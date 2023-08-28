@@ -3,18 +3,17 @@ from app.core.security import jwt_handler as jwt
 from app.core.security.access_control import access_control as ac
 from app.database.crud import users
 from app.routers.v1 import ROUTE_PREFIX
-from app.pydantic_models.users import UserInfoPydantic
 from typing import Annotated
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from casbin import Enforcer
-
+from tortoise.contrib.pydantic.base import PydanticModel
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{ROUTE_PREFIX}/login")
 token_dep = Annotated[str, Depends(oauth2_scheme)]
 
 
-async def get_current_user(token: token_dep) -> UserInfoPydantic:
+async def get_current_user(token: token_dep) -> PydanticModel:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials.",
@@ -34,27 +33,34 @@ async def get_current_user(token: token_dep) -> UserInfoPydantic:
 
 
 async def get_current_active_user(
-    current_user: Annotated[UserInfoPydantic, Depends(get_current_user)]
-):
-    if current_user.disabled_at:
+    current_user: Annotated[PydanticModel, Depends(get_current_user)]
+) -> dict:
+    if current_user.model_dump().get("disabled_at"):
         raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+    return current_user.model_dump()
 
 
 async def authorize_todo_operation(
     req: Request,
     enforcer: Enforcer = Depends(ac.get_todos_enforcer),
-    user: UserInfoPydantic = Depends(get_current_active_user),
+    user: PydanticModel = Depends(get_current_active_user),
 ):
-    sub = [role.slug for role in user.roles]
-    obj = req.url.path
-    act = req.method
-    if not enforcer.enforce(sub, obj, act):
+    roles = user.model_dump().get("roles")
+    if roles:
+        sub = [role.slug for role in roles]
+        obj = req.url.path
+        act = req.method
+        if not enforcer.enforce(sub, obj, act):
+            raise HTTPException(
+                status_code=403,
+                detail="Forbidden: Insufficient rights to perform this action",
+            )
+    else:
         raise HTTPException(
             status_code=403,
-            detail="Forbidden: Insufficient rights to perform this action",
+            detail="Forbidden: User has no roles assigned",
         )
 
 
-current_user = Annotated[UserInfoPydantic, Depends(get_current_active_user)]
-authorized_todo_user = Annotated[UserInfoPydantic, Depends(authorize_todo_operation)]
+current_user = Annotated[dict, Depends(get_current_active_user)]
+authorized_todo_user = Annotated[PydanticModel, Depends(authorize_todo_operation)]

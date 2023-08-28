@@ -8,8 +8,6 @@ from app.core.settings import (
     SENDGRID_API_JSON_DATA_TEMPLATE,
 )
 from app.database.models import SentEmail, User
-from app.pydantic_models.messages import SentEmailPydantic
-from tortoise.contrib.pydantic.base import PydanticModel
 
 
 async def send_email(
@@ -18,7 +16,20 @@ async def send_email(
     template_id: str,
     dynamic_template_data: dict | None = None,
     user_id: str | int | None = None,
-) -> PydanticModel[SentEmailPydantic]:
+):
+    """Send email using Sendgrid API.
+    This function should be taken as LRO (Long Running Operation).
+
+    Args:
+        subject (str): Email subject
+        email_to (str): Email to
+        template_id (str): Sendgrid template id
+        dynamic_template_data (dict, optional): Sendgrid template data. Defaults to None.
+        user_id (str | int | None, optional): User id. Defaults to None.
+
+    Returns:
+        None
+    """
     subject = subject
     to = {"to": [{"email": email_to}]}
 
@@ -31,7 +42,7 @@ async def send_email(
     json_data_copy.update({"template_id": template_id})
 
     # Create email data for database
-    sent_email = {
+    sent_email: dict[str, str | None] = {
         "email_subject": subject,
         "from_email": env.SENDGRID_SENDER,
         "to_email": email_to,
@@ -44,16 +55,11 @@ async def send_email(
                 headers=SENDGRID_API_HEADERS,
                 json=json_data_copy,
             ):
-                # TODO: Add sent_at to database
-                # TODO: Add LRO support with Celery
-                ...
-
-        sent_email = await SentEmail.create(
-            **sent_email, user=None if not user_id else await User.get(id=user_id)
-        )
-        sent_email_pydantic = await SentEmailPydantic.from_tortoise_orm(sent_email)
-
-        return sent_email_pydantic
+                await SentEmail.create(
+                    using_db=None,
+                    **sent_email,
+                    user=None if not user_id else await User.get(id=user_id),
+                )
 
     except aiohttp.ServerTimeoutError:
         log.error("Request Timeout")
@@ -66,12 +72,8 @@ async def send_email(
     except aiohttp.ClientError as e:
         log.error(f"A client error has occourred: {e}")
 
-    # Comment until I add Celery
-    # sent_email.update({"sent_at": None})
-    # sent_email = await SentEmail.create(**sent_email)
-    # sent_email_pydantic = await SentEmailPydantic.from_tortoise_orm(sent_email)
-
-    # return sent_email_pydantic
+    sent_email.update({"sent_at": None})
+    await SentEmail.create(using_db=None, **sent_email)
 
 
 async def send_wellcome(
@@ -79,7 +81,20 @@ async def send_wellcome(
     first_name: str,
     user_id: int | str,
     template_id: str = env.SENDGRID_NEW_USER_TEMPLATE_ID,
-) -> PydanticModel[SentEmailPydantic]:
+):
+    """Send wellcome email to new user.
+    This function should be taken as LRO (Long Running Operation).
+
+    Args:
+        email_to (str): Email to
+        first_name (str): User first name
+        user_id (int | str): User id
+        template_id (str, optional): Sendgrid template id. Defaults to env.SENDGRID_NEW_USER_TEMPLATE_ID.
+
+    Returns:
+        None
+    """
+
     subject = "Verfication Code"
 
     dynamic_template_data = {
@@ -87,12 +102,10 @@ async def send_wellcome(
         "subject": subject,
     }
 
-    sent_email = await send_email(
+    await send_email(
         subject=subject,
         email_to=email_to,
         user_id=user_id,
         template_id=template_id,
         dynamic_template_data=dynamic_template_data,
     )
-
-    return sent_email

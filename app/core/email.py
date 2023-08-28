@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import copy
+
 import aiohttp
+
 from app.core.settings import (
-    env,
-    log,
     SENDGRID_API_HEADERS,
     SENDGRID_API_JSON_DATA_TEMPLATE,
+    env,
+    log,
 )
 from app.database.models import SentEmail, User
 

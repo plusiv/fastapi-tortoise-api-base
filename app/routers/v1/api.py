@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
-from app.routers.v1.endpoints import login, users, emails, sms, todos
+
+from app.routers.v1.endpoints import emails, login, sms, todos, users
 
 router = APIRouter()
 router.include_router(login.router, tags=["User"])

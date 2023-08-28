@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import aiohttp
-from app.core.settings import env, log
-from app.pydantic_models.messages import SentSMSPydantic
-from app.database.models import SentSMS
 from tortoise.contrib.pydantic.base import PydanticModel
+
+from app.core.settings import env, log
+from app.database.models import SentSMS
+from app.pydantic_models.messages import SentSMSPydantic
 
 
 async def send_sms(

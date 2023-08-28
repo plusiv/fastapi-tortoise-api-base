@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from app.database.models import Todo, TodoStatus, User
+from tortoise.contrib.pydantic.base import PydanticListModel, PydanticModel
+
 from app.core.settings import env
+from app.database.models import Todo, TodoStatus, User
 from app.pydantic_models.todos import (
     TodoPydantic,
     TodoPydanticIn,
@@ -10,8 +12,6 @@ from app.pydantic_models.todos import (
     TodoStatusPydanticList,
 )
 from app.utils.utils import db_exceptions_handler
-
-from tortoise.contrib.pydantic.base import PydanticModel, PydanticListModel
 
 
 @db_exceptions_handler

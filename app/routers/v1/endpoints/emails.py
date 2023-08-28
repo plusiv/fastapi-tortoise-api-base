@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from app.routers.v1.dependencies import current_user
-from app.core import email
-
 from fastapi import APIRouter, BackgroundTasks
 
+from app.core import email
+from app.routers.v1.dependencies import current_user
 
 router = APIRouter()
 

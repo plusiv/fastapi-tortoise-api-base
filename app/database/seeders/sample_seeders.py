@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from app.core.settings import env
-from app.database.models import User, Role, TodoStatus
-from app.core.security.hashing import get_password_hash
 import random
+
 from faker import Faker
+
+from app.core.security.hashing import get_password_hash
+from app.core.settings import env
+from app.database.models import Role, TodoStatus, User
 
 
 async def generate_seeders(number_of_users: int = 10, test_user: dict | None = None):

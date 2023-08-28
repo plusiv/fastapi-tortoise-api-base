@@ -4,10 +4,11 @@
 # https://www.geekslop.com/technology-articles/2016/here-are-the-recommended-maximum-data-length-limits-for-common-database-and-programming-fields.
 # Some fields like e-mail has been taken from its RFC like the RFC 3696 for
 # e-mail standards.
-from tortoise.models import Model
-from tortoise import fields
 from datetime import datetime
 from enum import Enum
+
+from tortoise import fields
+from tortoise.models import Model
 
 
 # Enums

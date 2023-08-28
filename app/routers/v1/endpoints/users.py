@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from app.pydantic_models.users import UserPydantic
-from app.routers.v1.dependencies import current_user
-
 from fastapi import APIRouter
 
+from app.pydantic_models.users import UserPydantic
+from app.routers.v1.dependencies import current_user
 
 router = APIRouter()
 

@@ -1,43 +1,34 @@
 # -*- coding: utf-8 -*-
-from app.core.settings import log
 from tortoise import exceptions as db_exception
+
+from app.core.settings import log
 
 
 def db_exceptions_handler(func):
     log_prefix = "DB_ERROR |"
 
+    error_messages = {
+        db_exception.ConfigurationError: "A config error has occurred",
+        db_exception.DBConnectionError: "A connection error has occurred",
+        db_exception.DoesNotExist: "Data does not exist on database",
+        db_exception.FieldError: "There's a problem with a model field",
+        db_exception.IncompleteInstanceError: "A partial model has been attempted to be parsed",
+        db_exception.IntegrityError: "There's an integrity error on the data",
+        db_exception.MultipleObjectsReturned: "Multiple objects returned in .get() operation",
+        db_exception.NoValuesFetched: "No values fetched from query",
+        db_exception.OperationalError: "An error has occurred in the operation",
+        db_exception.ParamsError: "Wrong parameters were given to function",
+        db_exception.TransactionManagementError: "A transaction error has occurred",
+        db_exception.UnSupportedError: "Operation not supported",
+        db_exception.ValidationError: "Could not validate field model",
+    }
+
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except db_exception.ConfigurationError as e:
-            log.error(f"{log_prefix} A config error has occurred: {e}")
-        except db_exception.DBConnectionError as e:
-            log.error(f"{log_prefix} A connection error has occurred: {e}")
-        except db_exception.DoesNotExist as e:
-            log.error(f"{log_prefix} Data does not exist on databse: {e}")
-        except db_exception.FieldError as e:
-            log.error(f"{log_prefix} There's a problem with a model field: {e}")
-        except db_exception.IncompleteInstanceError as e:
-            log.error(
-                f"{log_prefix} A partial model has been attempted to be parsed: {e}"
-            )
-        except db_exception.IntegrityError as e:
-            log.error(f"{log_prefix} There's an integrity error on the data: {e}")
-        except db_exception.MultipleObjectsReturned as e:
-            log.error(
-                f"{log_prefix} Multiple objects returned in .get() operation: {e}"
-            )
-        except db_exception.NoValuesFetched as e:
-            log.error(f"{log_prefix} No velues fetched from query: {e}")
-        except db_exception.OperationalError as e:
-            log.error(f"{log_prefix} An error has occurred in the operation: {e}")
-        except db_exception.ParamsError as e:
-            log.error(f"{log_prefix} Wrong parameters was given to function: {e}")
-        except db_exception.TransactionManagementError as e:
-            log.error(f"{log_prefix} A transaction error has occurred: {e}")
-        except db_exception.UnSupportedError as e:
-            log.error(f"{log_prefix} Operation not supported: {e}")
-        except db_exception.ValidationError as e:
-            log.error(f"{log_prefix} Could not validate field model: {e}")
+        except tuple(error_messages.keys()) as e:
+            exception_type = type(e).__name__
+            error_message = error_messages[type(e)]
+            log.error(f"{log_prefix} {error_message} [{exception_type}]: {e}")
 
     return wrapper

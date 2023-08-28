@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from app.database.models import User as User, Role
 from tortoise.contrib.pydantic.creator import (
     pydantic_model_creator,
     pydantic_queryset_creator,
 )
+
+from app.database.models import Role, User
 
 
 class RolePydantic(pydantic_model_creator(Role, name="Role")):

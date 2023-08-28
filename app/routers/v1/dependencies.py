@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+from typing import Annotated
+
+from casbin import Enforcer
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer
+from tortoise.contrib.pydantic.base import PydanticModel
+
 from app.core.security import jwt_handler as jwt
 from app.core.security.access_control import access_control as ac
 from app.database.crud import users
 from app.routers.v1 import ROUTE_PREFIX
-from typing import Annotated
-from fastapi import Depends, HTTPException, Request, status
-from fastapi.security import OAuth2PasswordBearer
-from casbin import Enforcer
-from tortoise.contrib.pydantic.base import PydanticModel
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{ROUTE_PREFIX}/login")
 token_dep = Annotated[str, Depends(oauth2_scheme)]

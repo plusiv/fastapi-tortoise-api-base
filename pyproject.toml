@@ -35,7 +35,39 @@ ruff = "^0.0.285"
 mypy = "^1.5.1"
 
 [tool.ruff]
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "I",   # isort
+  "PL",  # pylint
+
+]
 ignore = ["E501"]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+target-version = "py311"
 
 [tool.aerich]
 tortoise_orm = "app.core.settings.TORTOISE_ORM"

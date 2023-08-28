@@ -1,28 +1,27 @@
 # -*- coding: utf-8 -*-
+from fastapi import APIRouter, HTTPException, status
+
+from app.database.crud.todos import (
+    add_user_to_todo,
+    create_status,
+    create_user_todo,
+    get_status,
+    get_todo_ownership,
+    get_user_todos,
+    get_users_from_todo,
+    remove_user_from_todo,
+    update_user_todo_status,
+)
 from app.pydantic_models.todos import (
     TodoPydantic,
-    TodoPydanticList,
     TodoPydanticIn,
+    TodoPydanticList,
     TodoStatusPydantic,
     TodoStatusPydanticIn,
     TodoStatusPydanticList,
 )
 from app.pydantic_models.users import UserPydanticList
-from app.routers.v1.dependencies import current_user, authorized_todo_user
-from app.database.crud.todos import (
-    create_user_todo,
-    get_todo_ownership,
-    get_user_todos,
-    get_status,
-    create_status,
-    update_user_todo_status,
-    add_user_to_todo,
-    get_users_from_todo,
-    remove_user_from_todo,
-)
-
-from fastapi import APIRouter, status, HTTPException
-
+from app.routers.v1.dependencies import authorized_todo_user, current_user
 
 router = APIRouter()
 

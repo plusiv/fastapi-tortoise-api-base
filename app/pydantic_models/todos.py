@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from app.database.models import Todo, TodoStatus
 from tortoise.contrib.pydantic.creator import (
     pydantic_model_creator,
     pydantic_queryset_creator,
 )
+
+from app.database.models import Todo, TodoStatus
 
 
 class TodoStatusPydantic(pydantic_model_creator(TodoStatus, name="TodoStatus")):

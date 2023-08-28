@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from app.core.settings import TORTOISE_ORM, init_loggers, log, env
-from app.routers.v1 import api as v1, ROUTE_PREFIX as v1_prefix
 from fastapi import FastAPI
-from tortoise.contrib.fastapi import register_tortoise
 from tortoise import exceptions as db_exception
+from tortoise.contrib.fastapi import register_tortoise
+
+from app.core.settings import TORTOISE_ORM, env, init_loggers, log
+from app.routers.v1 import ROUTE_PREFIX as v1_prefix
+from app.routers.v1 import api as v1
 
 init_loggers()
 

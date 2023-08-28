@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
+from tortoise.contrib.pydantic.base import PydanticModel
+
+from app.core.security.hashing import verify_password
 from app.database.models import User
 from app.pydantic_models.users import UserPydantic
-from app.core.security.hashing import verify_password
 from app.utils.utils import db_exceptions_handler
-from datetime import datetime
-from tortoise.contrib.pydantic.base import PydanticModel
 
 
 @db_exceptions_handler

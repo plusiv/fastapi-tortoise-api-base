@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from tests.conftest import test_user
-
 import pytest
+from fastapi import status
+
+from tests.conftest import test_user
 
 
 @pytest.mark.anyio
@@ -16,4 +17,4 @@ async def test_user_login(client):
     }
     response = await client.post("/api/v1/login", data=data, headers=headers)
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK

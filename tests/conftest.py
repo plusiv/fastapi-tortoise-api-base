@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-from app.database.seeders import sample_seeders
-
 import pytest
+from asgi_lifespan import LifespanManager
+from httpx import AsyncClient
 from tortoise import Tortoise
 
-from httpx import AsyncClient
-from asgi_lifespan import LifespanManager
-
+from app.database.seeders import sample_seeders
 from app.main import app
 
 test_user = {"username": "test", "password": "test"}

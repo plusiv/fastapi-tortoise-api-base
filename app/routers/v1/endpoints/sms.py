@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from app.pydantic_models.messages import SentSMSPydantic
-from app.routers.v1.dependencies import current_user
-from app.core import sms
-
 from fastapi import APIRouter, HTTPException, status
 
+from app.core import sms
+from app.pydantic_models.messages import SentSMSPydantic
+from app.routers.v1.dependencies import current_user
 
 router = APIRouter()
 

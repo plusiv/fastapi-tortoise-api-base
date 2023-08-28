@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import uvicorn.logging as uvicorn_logging
 import logging
+
+import uvicorn.logging as uvicorn_logging
 from pydantic import EmailStr, HttpUrl, ValidationError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from tortoise import Tortoise

@@ -8,7 +8,7 @@ from tortoise.contrib.pydantic.base import PydanticModel
 
 async def send_sms(
     number_to: str, body: str = "", number_from: str = env.TWILIO_FROM_NUMBER
-) -> PydanticModel[SentSMSPydantic]:
+) -> PydanticModel:
     data = {
         "Body": body,
         "From": number_from,

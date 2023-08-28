@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
 from app.database.models import User
-from app.database.crud.utils import utils
-from app.pydantic_models.users import UserInfoPydantic
+from app.pydantic_models.users import UserPydantic
 from app.core.security.hashing import verify_password
 from app.utils.utils import db_exceptions_handler
 from datetime import datetime
+from tortoise.contrib.pydantic.base import PydanticModel
 
 
 @db_exceptions_handler
-async def get_user(username: str) -> UserInfoPydantic | None:
-    user = await User.get_or_none(username=username)
+async def get_user(username: str) -> PydanticModel | None:
+    user = await User.get_or_none(username=username).prefetch_related(
+        "roles", "todos", "sent_emails", "sent_smss"
+    )
+    print(user)
 
     if user:
-        user_pydantic = await utils.serialize_user(user)
+        user_pydantic = await UserPydantic.from_tortoise_orm(user)
+
+        print(user_pydantic)
         return user_pydantic
 
     return None

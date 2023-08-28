@@ -6,6 +6,7 @@
 # e-mail standards.
 from tortoise.models import Model
 from tortoise import fields
+from datetime import datetime
 from enum import Enum
 
 
@@ -16,10 +17,14 @@ class Sex(str, Enum):
 
 
 # Helper Models
-class TimestampMixin:
+class TimestampMixin(Model):
     created_at = fields.DatetimeField(null=True, auto_now_add=True)
     modified_at = fields.DatetimeField(null=True)
     disabled_at = fields.DatetimeField(null=True)
+
+    async def soft_delete(self):
+        self.disabled_at = datetime.now()
+        await self.save()
 
 
 class Describable:
@@ -31,7 +36,7 @@ class Message:
 
 
 # Database Models
-class User(Model, TimestampMixin):
+class User(TimestampMixin):
     username = fields.CharField(max_length=64, unique=True)
     email = fields.CharField(max_length=320, unique=True)
     hashed_password = fields.CharField(max_length=255)
@@ -42,17 +47,22 @@ class User(Model, TimestampMixin):
     last_login = fields.DatetimeField(null=True)
 
     # Relationships
-    roles = fields.ManyToManyField("models.Role", related_name="users")
-    todos = fields.ManyToManyField("models.Todo", related_name="users")
+    roles: fields.ManyToManyRelation["Role"] = fields.ManyToManyField(
+        "models.Role", related_name="users"
+    )
+    todos: fields.ManyToManyRelation["Todo"] = fields.ManyToManyField(
+        "models.Todo", related_name="users"
+    )
 
     class Meta:
         table = "user"
 
     class PydanticMeta:
-        exclude = ["hashed_password"]
+        exclude = ("hashed_password",)
+        backward_relations = False
 
 
-class Role(Model, TimestampMixin, Describable):
+class Role(TimestampMixin, Describable):
     title = fields.CharField(max_length=50)
     slug = fields.CharField(max_length=50, unique=True)
 
@@ -92,7 +102,7 @@ class SentSMS(Model, Describable, Message):
         table = "sent_sms"
 
 
-class Todo(Model, TimestampMixin, Describable):
+class Todo(TimestampMixin, Describable):
     title = fields.CharField(max_length=320)
 
     # Relationships
@@ -104,11 +114,17 @@ class Todo(Model, TimestampMixin, Describable):
         backward_key="todo_id",
     )
 
+    users: fields.ManyToManyRelation[User]
+    todo_status_traces: fields.ReverseRelation["TodoStatusTrace"]
+
     class Meta:
         table = "todo"
 
+    class PydanticMeta:
+        backward_relations = False
 
-class TodoStatus(Model, TimestampMixin, Describable):
+
+class TodoStatus(TimestampMixin, Describable):
     name = fields.CharField(max_length=50, unique=True)
     slug = fields.CharField(max_length=50, unique=True)
 
@@ -116,7 +132,7 @@ class TodoStatus(Model, TimestampMixin, Describable):
         table = "todo_status"
 
 
-class TodoStatusTrace(Model, TimestampMixin):
+class TodoStatusTrace(TimestampMixin):
     todo = fields.ForeignKeyField("models.Todo")
     todo_status = fields.ForeignKeyField("models.TodoStatus")
 

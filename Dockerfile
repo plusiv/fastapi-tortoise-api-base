@@ -1,4 +1,3 @@
-ARG POETRY_VERSION=1.4.2
 #################### Base ####################
 ARG PYTHON_VERSION=3.11
 FROM python:${PYTHON_VERSION}-slim AS base
@@ -11,12 +10,18 @@ ENV UID=1112 \
     TEMP_DIR_PATH=/tmp \
     PORT=8000
 
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl -f http://localhost:${PORT}/api/ping || exit 1
+
 RUN groupadd -g ${GID} ${GROUP_NAME} && \
     useradd -l -r -u ${UID} -g ${GROUP_NAME} ${USER_NAME}
 
+RUN apt-get update && apt-get install -y --no-install-recommends git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 #################### Requirements generation ####################
-ARG POETRY_VERSION
+ARG POETRY_VERSION=1.4.2
 FROM base AS requirements-stage
 
 
@@ -30,7 +35,6 @@ RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}" && \
 
 
 #################### development ####################
-ARG POETRY_VERSION
 FROM base AS development
 
 ENV ENV=development
@@ -39,8 +43,7 @@ WORKDIR ${WORK_DIR}
 
 COPY --from=requirements-stage ${TEMP_DIR_PATH}/requirements.dev.txt ${WORK_DIR}/requirements.txt
 
-RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}" && \
-    pip install --no-cache-dir --upgrade -r "${WORK_DIR}/requirements.txt"
+RUN  pip install --no-cache-dir --upgrade -r "${WORK_DIR}/requirements.txt"
 
 EXPOSE ${PORT}
 

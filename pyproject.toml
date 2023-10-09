@@ -18,7 +18,7 @@ python-multipart = "^0.0.6"
 aiohttp = "^3.8.5"
 aiodns = "^3.0.0"
 email-validator = "^2.0.0.post2"
-casbin = "^1.24.0"
+casbin = "^1.31.2"
 pydantic-settings = "^2.0.3"
 
 
